@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09afbb1c56f4aea46a364fc9ca84c8ed, type: 3}
   m_Name: DeveloperDebugSetting
   m_EditorClassIdentifier: 
-  m_EnableForBuild: 0
+  enableForBuild: 1
