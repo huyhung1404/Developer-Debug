@@ -17,17 +17,21 @@ namespace DeveloperDebug.Editor
         public override void OnInspectorGUI()
         {
             m_Setting = (DeveloperDebugSetting) target;
+            serializedObject.Update();
             DrawEnableForBuild();
             if (m_MethodInfo == null)
             {
                 UpdateDictionary();
             }
             DrawDictionary(m_Setting.debugData);
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(target);
         }
         private void DrawEnableForBuild()
         {
             var lastEnable = m_Setting.enableForBuild;
             m_Setting.enableForBuild = EditorGUILayout.Toggle("Enable For Build", m_Setting.enableForBuild);
+            GUILayout.Space(10);
             if (lastEnable != m_Setting.enableForBuild)
             {
                 
@@ -57,21 +61,24 @@ namespace DeveloperDebug.Editor
                 m_EnableList.Add(i);
             }
 
-            EditorGUILayout.LabelField("Enable");
+            EditorGUILayout.LabelField("Enable",GUICustomStyle.StandardButtonStyle);
+            EditorGUILayout.Space(10);
             var count = m_EnableList.Count;
             for (var i = 0; i < count; i++)
             {
                 DrawData(funcData[m_EnableList[i]]);
             }
             
-            EditorGUILayout.LabelField("Editor Only");
+            EditorGUILayout.LabelField("Editor Only",GUICustomStyle.StandardButtonStyle);
+            EditorGUILayout.Space(10);
             count = m_EditorOnlyList.Count;
             for (var i = 0; i < count; i++)
             {
                 DrawData(funcData[m_EditorOnlyList[i]]);
             }
             
-            EditorGUILayout.LabelField("Disable");
+            EditorGUILayout.LabelField("Disable",GUICustomStyle.StandardButtonStyle);
+            EditorGUILayout.Space(10);
             count = m_DisableList.Count;
             for (var i = 0; i < count; i++)
             {
@@ -81,14 +88,34 @@ namespace DeveloperDebug.Editor
 
         private void DrawData(DeveloperDebugSettingData data)
         {
-            EditorGUILayout.LabelField(data.functionName);
-            data.enable = EditorGUILayout.Toggle("Enable", data.enable);
-            GUI.enabled = data.enable;    
-            data.keyCode = EditorGUILayout.TextField("KeyCode", data.keyCode);
-            data.touchCode = EditorGUILayout.TextField("TouchCode", data.touchCode);
-            data.editorOnly = EditorGUILayout.Toggle("Editor Only", data.editorOnly);
+            GUICustomStyle.GuiLine();
+            EditorGUILayout.LabelField(data.functionName,GUICustomStyle.CenteredBigLabel);
+            EditorGUILayout.Space(8);
+            EditorGUILayout.BeginHorizontal();
+            data.enable = EditorGUILayout.ToggleLeft("Enable", data.enable, GUILayout.MaxWidth(80));
+            GUI.enabled = data.enable;
+            data.editorOnly = EditorGUILayout.ToggleLeft("Editor Only", data.editorOnly, GUILayout.MaxWidth(80));
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("KeyCode",GUICustomStyle.MiddleLeftBoldMiniLabel);
+            data.keyCode = EditorGUILayout.TextField(data.keyCode,GUICustomStyle.EditTextFieldStyle);
+            EditorGUILayout.Space(5);
+            EditorGUILayout.LabelField("TouchCode",GUICustomStyle.MiddleLeftBoldMiniLabel);
+            EditorGUILayout.BeginHorizontal();
+            GUI.enabled = false;
+            
+            data.touchCode = ChangeGraphicToTouch(EditorGUILayout.TextField(ChangeTouchCodeToGraphic(data.touchCode),GUICustomStyle.EditTextFieldStyle));
+            
+            GUI.enabled = data.enable;
+            if (GUILayout.Button("Edit", GUICustomStyle.EditButtonStyle))
+            {
+                data.editTouchCode = !data.editTouchCode;
+            }
+            EditorGUILayout.EndHorizontal();
+            if(data.editTouchCode) DrawButtonTouch(data);
             GUI.enabled = true;
             if (data.enable) CheckCorrect(data.keyCode, data.touchCode);
+            EditorGUILayout.Space(10);
         }
         
         private void OnEnable()
@@ -126,29 +153,73 @@ namespace DeveloperDebug.Editor
             var touchCodeLenght = touchCode.Length;
             if (keyCodeLength == 0 && touchCodeLenght == 0)
             {
+                GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This function will not be called", MessageType.Warning);
                 return;
             }
 
             if (keyCodeLength > 0 && keyCodeLength < 5)
             {
+                GUILayout.Space(5);
                 EditorGUILayout.HelpBox("The key code is case sensitive and at least 5 characters", MessageType.Error);
             }
             
-            if (touchCodeLenght > 0 && touchCodeLenght < 5)
+            if (touchCodeLenght > 0 && touchCodeLenght < 4)
             {
+                GUILayout.Space(5);
                 EditorGUILayout.HelpBox("The touch code is at least 4 characters", MessageType.Error);
             }
 
             if (keyCodeLength >= 5 && m_Setting.debugData.Count(item => item.enable && item.keyCode.Equals(keyCode)) > 1)
             {
+                GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This key code has been used", MessageType.Error);
             }
 
             if (touchCodeLenght >= 4 && m_Setting.debugData.Count(item => item.enable && item.touchCode.Equals(touchCode)) > 1)
             {
+                GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This touch code has been used", MessageType.Error);
             }
+        }
+
+        private void DrawButtonTouch(DeveloperDebugSettingData data)
+        {
+            GUILayout.Space(5);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("←", GUICustomStyle.ArrowButtonStyle))
+            {
+                data.touchCode += 'L';
+            }
+            if(GUILayout.Button("→",GUICustomStyle.ArrowButtonStyle))
+            {
+                data.touchCode += 'R';
+            }
+            if(GUILayout.Button("↑",GUICustomStyle.ArrowButtonStyle))
+            {
+                data.touchCode += 'U';
+            }
+            if(GUILayout.Button("↓",GUICustomStyle.ArrowButtonStyle))
+            {
+                data.touchCode += 'D';
+            }
+            if(GUILayout.Button("X",GUICustomStyle.ArrowButtonStyle))
+            {
+                data.touchCode = string.Empty;
+            }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private string ChangeTouchCodeToGraphic(string touchCode)
+        {
+            return touchCode.Replace('L', '←').Replace('R', '→').Replace('U', '↑').Replace('D', '↓');
+        }
+        
+        private string ChangeGraphicToTouch(string graphic)
+        {
+            return graphic.Replace('←','L').Replace('→','R').Replace('↑','U').Replace('↓','D');
         }
     }
 }

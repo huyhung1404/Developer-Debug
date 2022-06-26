@@ -24,9 +24,9 @@ namespace DeveloperDebug
                 var developerFuncData = debugData.Find(item => item.functionName.Equals(method.Name));
                 if (developerFuncData != null)
                 {
-                    if(!developerFuncData.enable) return;
+                    if(!developerFuncData.enable) continue;
 #if !UNITY_EDITOR
-                    if(developerFuncData.editorOnly) return;
+                    if(developerFuncData.editorOnly) continue;
 #endif
                     Action action = null;
                     if (!string.IsNullOrEmpty(developerFuncData.keyCode))
@@ -63,6 +63,7 @@ namespace DeveloperDebug
         public string keyCode;
         public string touchCode;
         public bool editorOnly;
+        public bool editTouchCode;
 
         public DeveloperDebugSettingData(string functionName)
         {
