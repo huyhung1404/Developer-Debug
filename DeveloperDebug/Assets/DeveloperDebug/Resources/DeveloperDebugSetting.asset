@@ -16,11 +16,19 @@ MonoBehaviour:
   debugData:
   - enable: 1
     functionName: DebugFunc1
-    keyCode: 
-    touchCode: 
+    keyCode: debug1
+    touchCode: UUDD
     editorOnly: 0
+    editTouchCode: 0
   - enable: 0
     functionName: DebugFunc2
     keyCode: 
     touchCode: 
     editorOnly: 0
+    editTouchCode: 0
+  - enable: 1
+    functionName: DebugFunc3
+    keyCode: debug3
+    touchCode: DDUU
+    editorOnly: 0
+    editTouchCode: 1
