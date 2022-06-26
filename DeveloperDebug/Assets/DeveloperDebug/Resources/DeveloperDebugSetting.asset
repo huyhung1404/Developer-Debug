@@ -13,3 +13,12 @@ MonoBehaviour:
   m_Name: DeveloperDebugSetting
   m_EditorClassIdentifier: 
   enableForBuild: 1
+  data:
+  - actionName: DebugFunc1
+    keyCode: fdfdsfsd
+    touchCode: fdsfsdfsdf
+    editorOnly: 0
+  - actionName: DebugFunc2
+    keyCode: sdfsdfsdf
+    touchCode: fdsfsdf
+    editorOnly: 0

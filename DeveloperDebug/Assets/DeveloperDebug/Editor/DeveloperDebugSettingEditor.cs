@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using Codice.Client.BaseCommands.BranchExplorer;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace DeveloperDebug.Editor
@@ -11,28 +9,26 @@ namespace DeveloperDebug.Editor
     [CustomEditor(typeof(DeveloperDebugSetting))]
     public class DeveloperDebugSettingEditor : Editor
     {
+        private DeveloperDebugSetting m_Setting;
         private MethodInfo[] m_MethodInfo;
-        private List<string> m_EnableList = new List<string>();
-        private List<string> m_EditorOnlyList = new List<string>();
-        private List<string> m_DisableList = new List<string>();
-
+        private readonly List<int> m_EnableList = new List<int>();
+        private readonly List<int> m_EditorOnlyList = new List<int>();
+        private readonly List<int> m_DisableList = new List<int>();
         public override void OnInspectorGUI()
         {
-            var setting = (DeveloperDebugSetting) target;
-            // serializedObject.Update();
-            DrawEnableForBuild(setting);
+            m_Setting = (DeveloperDebugSetting) target;
+            DrawEnableForBuild();
             if (m_MethodInfo == null)
             {
                 UpdateDictionary();
             }
-            DrawDictionary(setting.data);
-            // serializedObject.ApplyModifiedProperties();
+            DrawDictionary(m_Setting.debugData);
         }
-        private void DrawEnableForBuild(DeveloperDebugSetting setting)
+        private void DrawEnableForBuild()
         {
-            var lastEnable = setting.enableForBuild;
-            setting.enableForBuild = EditorGUILayout.Toggle("Enable For Build", setting.enableForBuild);
-            if (lastEnable != setting.enableForBuild)
+            var lastEnable = m_Setting.enableForBuild;
+            m_Setting.enableForBuild = EditorGUILayout.Toggle("Enable For Build", m_Setting.enableForBuild);
+            if (lastEnable != m_Setting.enableForBuild)
             {
                 
             }
@@ -43,51 +39,56 @@ namespace DeveloperDebug.Editor
             m_EnableList.Clear();
             m_EditorOnlyList.Clear();
             m_DisableList.Clear();
-            foreach (var developerDebugFunc in funcData)
+            var _count = funcData.Count;
+            for (var i = 0; i < _count; i++)
             {
-                if (string.IsNullOrEmpty(developerDebugFunc.Value.keyCode) &&
-                    string.IsNullOrEmpty(developerDebugFunc.Value.touchCode))
+                var developerDebugFunc = funcData[i];
+                if (!developerDebugFunc.enable)
                 {
-                    m_DisableList.Add(developerDebugFunc.Key);
+                    m_DisableList.Add(i);
                     continue;
                 }
-
-                if (developerDebugFunc.Value.editorOnly)
-                {
-                    m_EditorOnlyList.Add(developerDebugFunc.Key);
-                    continue;
-                }
-                m_EnableList.Add(developerDebugFunc.Key);
-            }
             
+                if (developerDebugFunc.editorOnly)
+                {
+                    m_EditorOnlyList.Add(i);
+                    continue;
+                }
+                m_EnableList.Add(i);
+            }
+
             EditorGUILayout.LabelField("Enable");
             var count = m_EnableList.Count;
             for (var i = 0; i < count; i++)
             {
-                DrawData(m_EnableList[i], funcData[m_EnableList[i]]);
+                DrawData(funcData[m_EnableList[i]]);
             }
             
             EditorGUILayout.LabelField("Editor Only");
             count = m_EditorOnlyList.Count;
             for (var i = 0; i < count; i++)
             {
-                DrawData(m_EditorOnlyList[i], funcData[m_EditorOnlyList[i]]);
+                DrawData(funcData[m_EditorOnlyList[i]]);
             }
             
             EditorGUILayout.LabelField("Disable");
             count = m_DisableList.Count;
             for (var i = 0; i < count; i++)
             {
-                DrawData(m_DisableList[i], funcData[m_DisableList[i]]);
+                DrawData(funcData[m_DisableList[i]]);
             }
         }
 
-        private void DrawData(string label ,DeveloperDebugSettingData data)
+        private void DrawData(DeveloperDebugSettingData data)
         {
-            EditorGUILayout.LabelField(label);
+            EditorGUILayout.LabelField(data.functionName);
+            data.enable = EditorGUILayout.Toggle("Enable", data.enable);
+            GUI.enabled = data.enable;    
             data.keyCode = EditorGUILayout.TextField("KeyCode", data.keyCode);
             data.touchCode = EditorGUILayout.TextField("TouchCode", data.touchCode);
             data.editorOnly = EditorGUILayout.Toggle("Editor Only", data.editorOnly);
+            GUI.enabled = true;
+            if (data.enable) CheckCorrect(data.keyCode, data.touchCode);
         }
         
         private void OnEnable()
@@ -102,19 +103,52 @@ namespace DeveloperDebug.Editor
         private void UpdateDictionary()
         {
             m_MethodInfo = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);
-            var oldDictionary = ((DeveloperDebugSetting) target).data;
-            var newDictionary = new Dictionary<string, DeveloperDebugSettingData>();
-            foreach (var method in m_MethodInfo)
+            var oldData = ((DeveloperDebugSetting) target).debugData;
+            var newData = new List<DeveloperDebugSettingData>();
+            var methodCount = m_MethodInfo.Length;
+            for (var i = 0; i < methodCount; i++)
             {
-                if (oldDictionary.ContainsKey(method.Name))
+                var data = oldData.Find(item => item.functionName.Equals(m_MethodInfo[i].Name));
+                if (data != null)
                 {
-                    newDictionary.Add(method.Name,oldDictionary[method.Name]);
+                    newData.Add(data);
                     continue;
                 }
-                newDictionary.Add(method.Name,new DeveloperDebugSettingData());
+                newData.Add(new DeveloperDebugSettingData(m_MethodInfo[i].Name));
+            }
+            
+            ((DeveloperDebugSetting)target).debugData = newData;
+        }
+
+        private void CheckCorrect(string keyCode, string touchCode)
+        {
+            var keyCodeLength = keyCode.Length;
+            var touchCodeLenght = touchCode.Length;
+            if (keyCodeLength == 0 && touchCodeLenght == 0)
+            {
+                EditorGUILayout.HelpBox("This function will not be called", MessageType.Warning);
+                return;
             }
 
-            ((DeveloperDebugSetting)target).data = newDictionary;
+            if (keyCodeLength > 0 && keyCodeLength < 5)
+            {
+                EditorGUILayout.HelpBox("The key code is case sensitive and at least 5 characters", MessageType.Error);
+            }
+            
+            if (touchCodeLenght > 0 && touchCodeLenght < 5)
+            {
+                EditorGUILayout.HelpBox("The touch code is at least 4 characters", MessageType.Error);
+            }
+
+            if (keyCodeLength >= 5 && m_Setting.debugData.Count(item => item.enable && item.keyCode.Equals(keyCode)) > 1)
+            {
+                EditorGUILayout.HelpBox("This key code has been used", MessageType.Error);
+            }
+
+            if (touchCodeLenght >= 4 && m_Setting.debugData.Count(item => item.enable && item.touchCode.Equals(touchCode)) > 1)
+            {
+                EditorGUILayout.HelpBox("This touch code has been used", MessageType.Error);
+            }
         }
     }
 }
