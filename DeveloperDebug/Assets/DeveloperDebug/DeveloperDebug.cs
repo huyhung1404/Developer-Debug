@@ -20,25 +20,32 @@ namespace DeveloperDebug
 
     public static class KeyCodeDebug
     {
+        private static readonly Dictionary<string, Action> m_KeyCodeData;
+
+        static KeyCodeDebug()
+        {
+            m_KeyCodeData = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting").GetKeyCodeData();
+        }
+
         public static bool CheckKeyCodeActive()
         {
-            return DeveloperData.KEYCODE.Count > 0;
+            return m_KeyCodeData.Count > 0;
         }
 
         public static List<string> GetKeyData()
         {
-            return DeveloperData.KEYCODE.Select(pair => pair.Key).ToList();
+            return m_KeyCodeData.Select(pair => pair.Key).ToList();
         }
 
         public static Dictionary<string, Action> GetData()
         {
-            return DeveloperData.KEYCODE;
+            return m_KeyCodeData;
         }
 
         public static void CheckStringInput(string input)
         {
-            if (!DeveloperData.KEYCODE.ContainsKey(input)) return;
-            DeveloperData.KEYCODE[input].Invoke();
+            if (!m_KeyCodeData.ContainsKey(input)) return;
+            m_KeyCodeData[input].Invoke();
         }
 
         public static void Register(string key, Action action)
@@ -49,47 +56,54 @@ namespace DeveloperDebug
                 return;
             }
 
-            if (DeveloperData.KEYCODE.ContainsKey(key))
+            if (m_KeyCodeData.ContainsKey(key))
             {
                 Debug.Log("Key already exists");
                 return;
             }
 
-            DeveloperData.KEYCODE.Add(key, action);
+            m_KeyCodeData.Add(key, action);
             DeveloperDebug.CheckKeyCodeDebug = CheckKeyCodeActive();
         }
 
         public static void Unregister(string key)
         {
-            if (!DeveloperData.KEYCODE.ContainsKey(key))
+            if (!m_KeyCodeData.ContainsKey(key))
             {
                 Debug.Log("Key does not exist");
                 return;
             }
 
-            DeveloperData.KEYCODE.Remove(key);
+            m_KeyCodeData.Remove(key);
             DeveloperDebug.CheckKeyCodeDebug = CheckKeyCodeActive();
         }
     }
 
     public static class TouchDebug
     {
+        private static readonly Dictionary<string, Action> m_TouchData;
+
+        static TouchDebug()
+        {
+            m_TouchData = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting").GetTouchData();
+        }
+        
         private static readonly StringBuilder m_InputString = new StringBuilder();
         private static readonly Regex m_KeyRegex = new Regex(@"^[UDRL]*$");
 
         public static bool CheckTouchActive()
         {
-            return DeveloperData.TOUCH.Count > 0;
+            return m_TouchData.Count > 0;
         }
     
         public static List<string> GetTouchData()
         {
-            return DeveloperData.TOUCH.Select(pair => pair.Key).ToList();
+            return m_TouchData.Select(pair => pair.Key).ToList();
         }
     
         public static Dictionary<string, Action> GetData()
         {
-            return DeveloperData.TOUCH;
+            return m_TouchData;
         }
 
         public static void CheckTouchInfo(List<Vector2> touchInfo)
@@ -109,9 +123,9 @@ namespace DeveloperDebug
                 m_InputString.Append(tempChar);
             }
 
-            if (DeveloperData.TOUCH.ContainsKey(m_InputString.ToString()))
+            if (m_TouchData.ContainsKey(m_InputString.ToString()))
             {
-                DeveloperData.TOUCH[m_InputString.ToString()].Invoke();
+                m_TouchData[m_InputString.ToString()].Invoke();
             }
 
             m_InputString.Clear();
@@ -136,25 +150,25 @@ namespace DeveloperDebug
                 return;
             }
 
-            if (DeveloperData.TOUCH.ContainsKey(key))
+            if (m_TouchData.ContainsKey(key))
             {
                 Debug.Log("Key already exists");
                 return;
             }
 
-            DeveloperData.TOUCH.Add(key, action);
+            m_TouchData.Add(key, action);
             DeveloperDebug.CheckTouchDebug = CheckTouchActive();
         }
 
         public static void Unregister(string key)
         {
-            if (!DeveloperData.TOUCH.ContainsKey(key))
+            if (!m_TouchData.ContainsKey(key))
             {
                 Debug.Log("Key does not exist");
                 return;
             }
 
-            DeveloperData.TOUCH.Remove(key);
+            m_TouchData.Remove(key);
             DeveloperDebug.CheckTouchDebug = CheckTouchActive();
         }
     }
