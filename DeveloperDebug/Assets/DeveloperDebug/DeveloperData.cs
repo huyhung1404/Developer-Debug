@@ -15,6 +15,11 @@ namespace DeveloperDebug
         {
             Debug.LogError("Func2");
         }
+        
+        public static void DebugFunc3()
+        {
+            Debug.LogError("Func3");
+        }
     }
 }
 #endif

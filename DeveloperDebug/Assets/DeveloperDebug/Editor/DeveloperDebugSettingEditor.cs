@@ -135,7 +135,7 @@ namespace DeveloperDebug.Editor
             var methodCount = m_MethodInfo.Length;
             for (var i = 0; i < methodCount; i++)
             {
-                var data = oldData.Find(item => item.functionName.Equals(m_MethodInfo[i].Name));
+                var data = oldData.Find(item => string.Equals(item.functionName,m_MethodInfo[i].Name));
                 if (data != null)
                 {
                     newData.Add(data);
@@ -149,8 +149,8 @@ namespace DeveloperDebug.Editor
 
         private void CheckCorrect(string keyCode, string touchCode)
         {
-            var keyCodeLength = keyCode.Length;
-            var touchCodeLenght = touchCode.Length;
+            var keyCodeLength = string.IsNullOrEmpty(keyCode) ? 0 : keyCode.Length;
+            var touchCodeLenght = string.IsNullOrEmpty(touchCode) ? 0 : touchCode.Length;
             if (keyCodeLength == 0 && touchCodeLenght == 0)
             {
                 GUILayout.Space(5);
@@ -170,13 +170,13 @@ namespace DeveloperDebug.Editor
                 EditorGUILayout.HelpBox("The touch code is at least 4 characters", MessageType.Error);
             }
 
-            if (keyCodeLength >= 5 && m_Setting.debugData.Count(item => item.enable && item.keyCode.Equals(keyCode)) > 1)
+            if (keyCodeLength >= 5 && m_Setting.debugData.Count(item => item.enable && string.Equals(item.keyCode,keyCode)) > 1)
             {
                 GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This key code has been used", MessageType.Error);
             }
 
-            if (touchCodeLenght >= 4 && m_Setting.debugData.Count(item => item.enable && item.touchCode.Equals(touchCode)) > 1)
+            if (touchCodeLenght >= 4 && m_Setting.debugData.Count(item => item.enable && string.Equals(item.touchCode,touchCode)) > 1)
             {
                 GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This touch code has been used", MessageType.Error);
@@ -214,12 +214,12 @@ namespace DeveloperDebug.Editor
 
         private string ChangeTouchCodeToGraphic(string touchCode)
         {
-            return touchCode.Replace('L', '←').Replace('R', '→').Replace('U', '↑').Replace('D', '↓');
+            return string.IsNullOrEmpty(touchCode) ? null : touchCode.Replace('L', '←').Replace('R', '→').Replace('U', '↑').Replace('D', '↓');
         }
         
         private string ChangeGraphicToTouch(string graphic)
         {
-            return graphic.Replace('←','L').Replace('→','R').Replace('↑','U').Replace('↓','D');
+            return string.IsNullOrEmpty(graphic) ? null : graphic.Replace('←','L').Replace('→','R').Replace('↑','U').Replace('↓','D');
         }
     }
 }

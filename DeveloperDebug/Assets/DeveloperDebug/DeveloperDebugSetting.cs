@@ -21,7 +21,7 @@ namespace DeveloperDebug
             for (var i = methods.Length - 1; i >= 0; i--)
             {
                 var method = methods[i];
-                var developerFuncData = debugData.Find(item => item.functionName.Equals(method.Name));
+                var developerFuncData = debugData.Find(item => string.Equals(item.functionName,method.Name));
                 if (developerFuncData != null)
                 {
                     if(!developerFuncData.enable) continue;
