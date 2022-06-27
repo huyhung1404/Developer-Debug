@@ -19,7 +19,7 @@ MonoBehaviour:
     keyCode: debug1
     touchCode: UUDD
     editorOnly: 0
-    editTouchCode: 0
+    editTouchCode: 1
   - enable: 0
     functionName: DebugFunc2
     keyCode: 
@@ -29,6 +29,6 @@ MonoBehaviour:
   - enable: 1
     functionName: DebugFunc3
     keyCode: debug3
-    touchCode: DDUU
+    touchCode: DDUULR
     editorOnly: 0
     editTouchCode: 1

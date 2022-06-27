@@ -14,12 +14,13 @@ namespace DeveloperDebug.Editor
 
         static GUICustomStyle()
         {
+            var isDaskSkin = EditorGUIUtility.isProSkin;
             MiddleLeftBoldMiniLabel = new GUIStyle(EditorStyles.centeredGreyMiniLabel)
             {
                 fontSize = 12,
                 normal =
                 {
-                    textColor = Color.white
+                    textColor = isDaskSkin ? Color.white : Color.black
                 },
                 alignment = TextAnchor.MiddleLeft
             };
@@ -40,7 +41,7 @@ namespace DeveloperDebug.Editor
                 fontSize = 13,
                 normal =
                 {
-                    textColor = new Color(1f, 1f, 1f, 0.85f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
                 }
             };
 
@@ -50,7 +51,19 @@ namespace DeveloperDebug.Editor
                 fixedHeight = 30,
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 15,
-                fontStyle = FontStyle.Bold
+                fontStyle = FontStyle.Bold,
+                normal = 
+                {
+                    textColor = isDaskSkin ? Color.white : Color.black
+                },
+                hover = 
+                {
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f)
+                },
+                focused = 
+                {
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
+                }
             };
             
             EditButtonStyle = new GUIStyle(EditorGUIUtility.GetBuiltinSkin(EditorSkin.Scene).button)
@@ -59,7 +72,19 @@ namespace DeveloperDebug.Editor
                 fixedHeight = 25,
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 15,
-                fontStyle = FontStyle.Bold
+                fontStyle = FontStyle.Bold,
+                normal = 
+                {
+                    textColor = isDaskSkin ? Color.white : Color.black
+                },
+                hover = 
+                {
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f)
+                },
+                focused = 
+                {
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
+                }
             };
 
             EditTextFieldStyle = new GUIStyle(EditorGUIUtility.GetBuiltinSkin(EditorSkin.Scene).textField)
@@ -67,7 +92,20 @@ namespace DeveloperDebug.Editor
                 fixedHeight = 25,
                 fontSize = 15,
                 alignment = TextAnchor.MiddleLeft,
-                padding = new RectOffset(10,0,0,0)
+                padding = new RectOffset(10,0,0,0),
+                normal = 
+                {
+                    textColor = isDaskSkin ? Color.white : Color.black
+                },
+                hover = 
+                {
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f)
+                },
+                focused = 
+                {
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
+                }
+                
             };
         }
 
