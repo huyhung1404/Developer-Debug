@@ -68,12 +68,7 @@ namespace DeveloperDebug
 
         public static void Unregister(string key)
         {
-            if (!m_KeyCodeData.ContainsKey(key))
-            {
-                Debug.Log("Key does not exist");
-                return;
-            }
-
+            if (!m_KeyCodeData.ContainsKey(key)) return;
             m_KeyCodeData.Remove(key);
             DeveloperDebug.CheckKeyCodeDebug = CheckKeyCodeActive();
         }
@@ -162,12 +157,7 @@ namespace DeveloperDebug
 
         public static void Unregister(string key)
         {
-            if (!m_TouchData.ContainsKey(key))
-            {
-                Debug.Log("Key does not exist");
-                return;
-            }
-
+            if (!m_TouchData.ContainsKey(key)) return;
             m_TouchData.Remove(key);
             DeveloperDebug.CheckTouchDebug = CheckTouchActive();
         }
@@ -330,10 +320,10 @@ namespace DeveloperDebug
         /// </summary>
         /// <param name="key">The key is case sensitive and at least 5 characters</param>
         /// <param name="action">Executable code</param>
-        /// <param name="isOnlyEditor">Only running in Unity Editor</param>
-        public static void RegisterKeyCode(string key, Action action, bool isOnlyEditor = true)
+        /// <param name="runOnEditorOnly">Only running in Unity Editor</param>
+        public static void RegisterKeyCode(string key, Action action, bool runOnEditorOnly)
         {
-            if (isOnlyEditor)
+            if (runOnEditorOnly)
             {
 #if UNITY_EDITOR
                 KeyCodeDebug.Register(key, action);
@@ -346,9 +336,9 @@ namespace DeveloperDebug
 #endif
         }
 
-        public static void UnregisterKeyCode(string key, bool isOnlyEditor = true)
+        public static void UnregisterKeyCode(string key, bool runOnEditorOnly)
         {
-            if (isOnlyEditor)
+            if (runOnEditorOnly)
             {
 #if UNITY_EDITOR
                 KeyCodeDebug.Unregister(key);
@@ -365,10 +355,10 @@ namespace DeveloperDebug
         /// </summary>
         /// <param name="key">0nly 4 characters are valid 'U' | 'D' | 'L' | 'R'  means swipe 'UP' | 'DOWN' | 'LEFT' |'RIGHT' characters are capital letters</param>
         /// <param name="action">Executable code</param>
-        /// /// <param name="isOnlyEditor">Only running in Unity Editor</param>
-        public static void RegisterTouchDebug(string key, Action action, bool isOnlyEditor = true)
+        /// /// <param name="runOnEditorOnly">Only running in Unity Editor</param>
+        public static void RegisterTouchDebug(string key, Action action, bool runOnEditorOnly)
         {
-            if (isOnlyEditor)
+            if (runOnEditorOnly)
             {
 #if UNITY_EDITOR
                 TouchDebug.Register(key.ToUpper(), action);
@@ -381,9 +371,9 @@ namespace DeveloperDebug
 #endif
         }
 
-        public static void UnregisterTouchDebug(string key, bool isOnlyEditor = true)
+        public static void UnregisterTouchDebug(string key, bool runOnEditorOnly)
         {
-            if (isOnlyEditor)
+            if (runOnEditorOnly)
             {
 #if UNITY_EDITOR
                 TouchDebug.Unregister(key.ToUpper());

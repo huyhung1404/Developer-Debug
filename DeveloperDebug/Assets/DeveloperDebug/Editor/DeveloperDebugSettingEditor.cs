@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using UnityEngine;
-
 namespace DeveloperDebug.Editor
 {
     using UnityEditor;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using UnityEngine;
+    
     [CustomEditor(typeof(DeveloperDebugSetting))]
     public class DeveloperDebugSettingEditor : Editor
     {
@@ -24,6 +24,7 @@ namespace DeveloperDebug.Editor
                 UpdateDictionary();
             }
             DrawDictionary(m_Setting.debugData);
+            if(!GUI.changed) return;
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(target);
         }
@@ -121,7 +122,7 @@ namespace DeveloperDebug.Editor
             EditorGUILayout.EndHorizontal();
             if(data.editTouchCode) DrawButtonTouch(data);
             GUI.enabled = true;
-            if (data.enable) CheckCorrect(data.keyCode, data.touchCode);
+            if (data.enable) CheckCorrect(data.keyCode, data.touchCode,m_Setting.debugData);
             EditorGUILayout.Space(10);
         }
         
@@ -154,11 +155,11 @@ namespace DeveloperDebug.Editor
             ((DeveloperDebugSetting)target).debugData = newData;
         }
 
-        private void CheckCorrect(string keyCode, string touchCode)
+        public static void CheckCorrect(string keyCode, string touchCode,List<DeveloperDebugSettingData> data,int eventCount = 1)
         {
             var keyCodeLength = string.IsNullOrEmpty(keyCode) ? 0 : keyCode.Length;
             var touchCodeLenght = string.IsNullOrEmpty(touchCode) ? 0 : touchCode.Length;
-            if (keyCodeLength == 0 && touchCodeLenght == 0)
+            if (keyCodeLength == 0 && touchCodeLenght == 0 || eventCount == 0)
             {
                 GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This function will not be called", MessageType.Warning);
@@ -177,20 +178,20 @@ namespace DeveloperDebug.Editor
                 EditorGUILayout.HelpBox("The touch code is at least 4 characters", MessageType.Error);
             }
 
-            if (keyCodeLength >= 5 && m_Setting.debugData.Count(item => item.enable && string.Equals(item.keyCode,keyCode)) > 1)
+            if (keyCodeLength >= 5 && data.Count(item => item.enable && string.Equals(item.keyCode,keyCode)) > 1)
             {
                 GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This key code has been used", MessageType.Error);
             }
 
-            if (touchCodeLenght >= 4 && m_Setting.debugData.Count(item => item.enable && string.Equals(item.touchCode,touchCode)) > 1)
+            if (touchCodeLenght >= 4 && data.Count(item => item.enable && string.Equals(item.touchCode,touchCode)) > 1)
             {
                 GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This touch code has been used", MessageType.Error);
             }
         }
 
-        private void DrawButtonTouch(DeveloperDebugSettingData data)
+        public static void DrawButtonTouch(DeveloperDebugSettingData data)
         {
             GUILayout.Space(5);
             EditorGUILayout.BeginHorizontal();
@@ -219,12 +220,12 @@ namespace DeveloperDebug.Editor
             EditorGUILayout.EndHorizontal();
         }
 
-        private string ChangeTouchCodeToGraphic(string touchCode)
+        public static string ChangeTouchCodeToGraphic(string touchCode)
         {
             return string.IsNullOrEmpty(touchCode) ? null : touchCode.Replace('L', '←').Replace('R', '→').Replace('U', '↑').Replace('D', '↓');
         }
         
-        private string ChangeGraphicToTouch(string graphic)
+        public static string ChangeGraphicToTouch(string graphic)
         {
             return string.IsNullOrEmpty(graphic) ? null : graphic.Replace('←','L').Replace('→','R').Replace('↑','U').Replace('↓','D');
         }

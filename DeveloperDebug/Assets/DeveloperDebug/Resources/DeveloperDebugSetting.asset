@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09afbb1c56f4aea46a364fc9ca84c8ed, type: 3}
   m_Name: DeveloperDebugSetting
   m_EditorClassIdentifier: 
-  enableForBuild: 1
   debugData:
   - enable: 1
     functionName: DebugFunc1
     keyCode: debug1
     touchCode: UUDD
     editorOnly: 0
-    editTouchCode: 1
+    editTouchCode: 0
   - enable: 0
     functionName: DebugFunc2
     keyCode: 
@@ -31,4 +30,4 @@ MonoBehaviour:
     keyCode: debug3
     touchCode: DDUULR
     editorOnly: 0
-    editTouchCode: 1
+    editTouchCode: 0
