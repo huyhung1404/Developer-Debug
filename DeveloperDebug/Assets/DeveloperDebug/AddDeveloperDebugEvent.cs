@@ -28,8 +28,8 @@ namespace DeveloperDebug
 
         private void OnDisable()
         {
-            DeveloperDebugExtension.UnregisterKeyCode(dataAdd.keyCode, dataAdd.editorOnly);
-            DeveloperDebugExtension.UnregisterTouchDebug(dataAdd.touchCode, dataAdd.editorOnly);
+            DeveloperDebugExtension.UnregisterKeyCode(dataAdd.keyCode);
+            DeveloperDebugExtension.UnregisterTouchDebug(dataAdd.touchCode);
         }
     }
 }

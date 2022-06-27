@@ -336,16 +336,10 @@ namespace DeveloperDebug
 #endif
         }
 
-        public static void UnregisterKeyCode(string key, bool runOnEditorOnly)
+        public static void UnregisterKeyCode(string key)
         {
-            if (runOnEditorOnly)
-            {
-#if UNITY_EDITOR
-                KeyCodeDebug.Unregister(key);
-#endif
-                return;
-            }
 #if UNITY_EDITOR || DEVELOPER_DEBUG
+            if(string.IsNullOrEmpty(key)) return;
             KeyCodeDebug.Unregister(key);
 #endif
         }
@@ -371,17 +365,10 @@ namespace DeveloperDebug
 #endif
         }
 
-        public static void UnregisterTouchDebug(string key, bool runOnEditorOnly)
+        public static void UnregisterTouchDebug(string key)
         {
-            if (runOnEditorOnly)
-            {
-#if UNITY_EDITOR
-                TouchDebug.Unregister(key.ToUpper());
-#endif
-                return;
-            }
-
 #if UNITY_EDITOR || DEVELOPER_DEBUG
+            if(string.IsNullOrEmpty(key)) return;
             TouchDebug.Unregister(key.ToUpper());
 #endif
         }
