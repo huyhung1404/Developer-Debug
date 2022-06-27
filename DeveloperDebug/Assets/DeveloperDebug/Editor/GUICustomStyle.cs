@@ -20,7 +20,8 @@ namespace DeveloperDebug.Editor
                 fontSize = 12,
                 normal =
                 {
-                    textColor = isDaskSkin ? Color.white : Color.black
+                    textColor = isDaskSkin ? Color.white : Color.black,
+                    background = null
                 },
                 alignment = TextAnchor.MiddleLeft
             };
@@ -41,7 +42,8 @@ namespace DeveloperDebug.Editor
                 fontSize = 13,
                 normal =
                 {
-                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    background = null
                 }
             };
 
@@ -54,15 +56,18 @@ namespace DeveloperDebug.Editor
                 fontStyle = FontStyle.Bold,
                 normal = 
                 {
-                    textColor = isDaskSkin ? Color.white : Color.black
+                    textColor = isDaskSkin ? Color.white : Color.black,
+                    background = null
                 },
                 hover = 
                 {
-                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    background = null
                 },
                 focused = 
                 {
-                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    background = null
                 }
             };
             
@@ -75,15 +80,18 @@ namespace DeveloperDebug.Editor
                 fontStyle = FontStyle.Bold,
                 normal = 
                 {
-                    textColor = isDaskSkin ? Color.white : Color.black
+                    textColor = isDaskSkin ? Color.white : Color.black,
+                    background = null
                 },
                 hover = 
                 {
-                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    background = null
                 },
                 focused = 
                 {
-                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    background = null
                 }
             };
 
@@ -95,17 +103,19 @@ namespace DeveloperDebug.Editor
                 padding = new RectOffset(10,0,0,0),
                 normal = 
                 {
-                    textColor = isDaskSkin ? Color.white : Color.black
+                    textColor = isDaskSkin ? Color.white : Color.black,
+                    background = null
                 },
                 hover = 
                 {
-                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    background = null
                 },
                 focused = 
                 {
-                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f)
+                    textColor = isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    background = null
                 }
-                
             };
         }
 
