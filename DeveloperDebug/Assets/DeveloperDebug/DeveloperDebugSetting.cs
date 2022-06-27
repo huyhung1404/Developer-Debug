@@ -8,7 +8,6 @@ namespace DeveloperDebug
     [Serializable]
     public class DeveloperDebugSetting : ScriptableObject
     {
-        public bool enableForBuild;
         public List<DeveloperDebugSettingData> debugData;
         private Dictionary<string, Action> m_KeyCodeData;
         private Dictionary<string, Action> m_TouchData;

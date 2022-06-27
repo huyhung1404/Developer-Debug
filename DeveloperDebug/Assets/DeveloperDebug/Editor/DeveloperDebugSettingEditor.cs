@@ -29,13 +29,20 @@ namespace DeveloperDebug.Editor
         }
         private void DrawEnableForBuild()
         {
-            var lastEnable = m_Setting.enableForBuild;
-            m_Setting.enableForBuild = EditorGUILayout.Toggle("Enable For Build", m_Setting.enableForBuild);
+            var scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';').ToList();
+            var enableForBuild = scriptingDefineSymbols.Contains("DEVELOPER_DEBUG");
+            var storeEnableValue = enableForBuild;
+            enableForBuild = EditorGUILayout.Toggle("Enable For Build", enableForBuild);
             GUILayout.Space(10);
-            if (lastEnable != m_Setting.enableForBuild)
+            if (storeEnableValue == enableForBuild) return;
+            if (enableForBuild)
             {
-                
+                scriptingDefineSymbols.Add("DEVELOPER_DEBUG");
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,scriptingDefineSymbols.ToArray());
+                return;
             }
+            scriptingDefineSymbols.Remove("DEVELOPER_DEBUG");
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,scriptingDefineSymbols.ToArray());
         }
 
         private void DrawDictionary(List<DeveloperDebugSettingData> funcData)
