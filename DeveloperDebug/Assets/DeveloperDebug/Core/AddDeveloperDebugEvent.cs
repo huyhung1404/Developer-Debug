@@ -1,6 +1,6 @@
 using UnityEngine.Events;
 
-namespace DeveloperDebug
+namespace DeveloperDebug.Core
 {
     using UnityEngine;
 
@@ -17,19 +17,19 @@ namespace DeveloperDebug
             if (debugEvent.GetPersistentEventCount() == 0) return;
             if (!string.IsNullOrEmpty(dataAdd.keyCode))
             {
-                DeveloperDebugExtension.RegisterKeyCode(dataAdd.keyCode, () => debugEvent.Invoke(),dataAdd.editorOnly);
+                // DeveloperDebugExtension.RegisterKeyCode(dataAdd.keyCode, () => debugEvent.Invoke(),dataAdd.editorOnly);
             }
 
             if (!string.IsNullOrEmpty(dataAdd.touchCode))
             {
-                DeveloperDebugExtension.RegisterTouchDebug(dataAdd.touchCode, () => debugEvent.Invoke(),dataAdd.editorOnly);
+                // DeveloperDebugExtension.RegisterTouchDebug(dataAdd.touchCode, () => debugEvent.Invoke(),dataAdd.editorOnly);
             }
         }
 
         private void OnDisable()
         {
-            DeveloperDebugExtension.UnregisterKeyCode(dataAdd.keyCode);
-            DeveloperDebugExtension.UnregisterTouchDebug(dataAdd.touchCode);
+            // DeveloperDebugExtension.UnregisterKeyCode(dataAdd.keyCode);
+            // DeveloperDebugExtension.UnregisterTouchDebug(dataAdd.touchCode);
         }
     }
 }

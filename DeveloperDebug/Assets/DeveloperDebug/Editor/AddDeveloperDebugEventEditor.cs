@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DeveloperDebug.Core;
 using UnityEngine;
 
 namespace DeveloperDebug.Editor

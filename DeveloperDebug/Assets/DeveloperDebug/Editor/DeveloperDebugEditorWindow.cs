@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DeveloperDebug.Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,8 +29,7 @@ namespace DeveloperDebug.Editor
             _textCode = string.Empty;
             _focusTextField = false;
             _keyData.Clear();
-            _keyData = KeyCodeDebug.GetKeyData();
-            _keyData.AddRange(TouchDebug.GetTouchData());
+            _keyData = DeveloperDebugKeyCode.GetKeyData();
             _keyCount = _keyData.Count;
         }
 
@@ -87,17 +87,11 @@ namespace DeveloperDebug.Editor
         private void ExecuteDeveloperCode()
         {
             if (string.IsNullOrEmpty(_textCode)) return;
-            var dic = KeyCodeDebug.GetData();
+            var dic = DeveloperDebugKeyCode.GetData();
             if (dic.ContainsKey(_textCode))
             {
                 dic[_textCode]?.Invoke();
-                return;
-            }
-
-            dic = TouchDebug.GetData();
-            if (dic.ContainsKey(_textCode))
-            {
-                dic[_textCode]?.Invoke();
+                Debug.Log("Execute");
                 return;
             }
 

@@ -1,3 +1,5 @@
+using DeveloperDebug.Core;
+
 namespace DeveloperDebug.Editor
 {
     using UnityEditor;
