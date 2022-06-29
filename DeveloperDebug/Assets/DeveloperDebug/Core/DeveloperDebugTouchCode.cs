@@ -1,4 +1,4 @@
-#if ((DEVELOPER_DEBUG && UNITY_ANDROID) || (DEVELOPER_DEBUG && UNITY_IOS)) //&& !UNITY_EDITOR
+#if ((DEVELOPER_DEBUG && UNITY_ANDROID) || (DEVELOPER_DEBUG && UNITY_IOS)) && !UNITY_EDITOR
 namespace DeveloperDebug.Core
 {
     using UnityEngine;
@@ -120,7 +120,8 @@ namespace DeveloperDebug.Core
         private void EndCheckTouchCode()
         {
             m_DebugMode = false;
-            Debug.LogError(m_InputCode);
+            if(!m_TouchCodeData.ContainsKey(m_InputCode)) return;
+            m_TouchCodeData[m_InputCode].Invoke();
         }
 
         #endregion
