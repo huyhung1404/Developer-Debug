@@ -47,6 +47,7 @@ namespace DeveloperDebug.Editor
                 m_Setting.longestTimeHoldingTouch = EditorGUILayout.FloatField(m_Setting.longestTimeHoldingTouch);
                 EditorGUILayout.LabelField("Min Length Touch Code");
                 m_Setting.minLengthTouchCode = EditorGUILayout.IntField(m_Setting.minLengthTouchCode);
+                DrawMenuButton();
                 EditorGUILayout.EndVertical();
             }
 
@@ -105,7 +106,7 @@ namespace DeveloperDebug.Editor
                 m_Setting.showEnableList = !m_Setting.showEnableList;
             }
 
-            EditorGUILayout.Space(10);
+            EditorGUILayout.Space(5);
             if (m_Setting.showEnableList)
             {
                 for (var i = 0; i < _count; i++)
@@ -120,7 +121,7 @@ namespace DeveloperDebug.Editor
                 m_Setting.showEditorOnlyList = !m_Setting.showEditorOnlyList;
             }
 
-            EditorGUILayout.Space(10);
+            EditorGUILayout.Space(5);
             if (m_Setting.showEditorOnlyList)
             {
                 for (var i = 0; i < _count; i++)
@@ -135,7 +136,7 @@ namespace DeveloperDebug.Editor
                 m_Setting.showDisableList = !m_Setting.showDisableList;
             }
 
-            EditorGUILayout.Space(10);
+            EditorGUILayout.Space(5);
             if (m_Setting.showDisableList)
             {
                 for (var i = 0; i < _count; i++)
@@ -276,6 +277,26 @@ namespace DeveloperDebug.Editor
                 data.touchCode = string.Empty;
             }
 
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+        
+        private void DrawMenuButton()
+        {
+            GUILayout.Space(5);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Clear Data",GUILayout.MaxWidth(150)))
+            {
+                if(EditorUtility.DisplayDialog("Clear current developer data?",
+                    "Are you sure you want to delete the data?", "Sure", "Cancel"))
+                {
+                    m_Setting.ClearDataDeveloperDebugData();
+                    UpdateDictionary();
+                }
+
+                GUIUtility.ExitGUI();
+            }
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }

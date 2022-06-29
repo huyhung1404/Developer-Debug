@@ -85,6 +85,21 @@ namespace DeveloperDebug.Core
             return _data;
         }
 #endif
+        public void ClearDataDeveloperDebugData()
+        {
+            waitingTimeForEachPress = 1;
+            numberOfTouchesRequiredToEnterDebugMode = 5;
+            longestTimeWaitingForNextTouchCheck = 2f;
+            longestTimeHoldingTouch = 0.75f;
+            minLengthKeyCode = 6;
+            minLengthTouchCode = 4;
+            useDefaultTouchCodeForKeyCode = false;
+            debugData.Clear();
+            showConfig = true;
+            showEnableList = false;
+            showEditorOnlyList = false;
+            showDisableList = false;
+        }
     }
 
     [Serializable]

@@ -18,14 +18,14 @@ MonoBehaviour:
   longestTimeHoldingTouch: 0.75
   minLengthKeyCode: 6
   minLengthTouchCode: 4
-  useDefaultTouchCodeForKeyCode: 1
+  useDefaultTouchCodeForKeyCode: 0
   debugData:
-  - enable: 1
+  - enable: 0
     functionName: DebugFunc1
     keyCode: 
-    touchCode: 1223
+    touchCode: 
     editorOnly: 0
-    editTouchCode: 1
+    editTouchCode: 0
   - enable: 0
     functionName: DebugFunc2
     keyCode: 
@@ -38,7 +38,7 @@ MonoBehaviour:
     touchCode: 
     editorOnly: 0
     editTouchCode: 0
-  showConfig: 0
+  showConfig: 1
   showEnableList: 1
-  showEditorOnlyList: 0
-  showDisableList: 1
+  showEditorOnlyList: 1
+  showDisableList: 0
