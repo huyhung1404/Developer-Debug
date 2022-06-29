@@ -21,20 +21,30 @@ namespace DeveloperDebug.Editor
             m_Setting = (DeveloperDebugSetting) target;
             serializedObject.Update();
             GUILayout.Space(5);
-            EditorGUILayout.BeginVertical(GUICustomStyle.BorderAreaStyle);
-            DrawEnableForBuild();
-            m_Setting.useDefaultTouchCodeForKeyCode = EditorGUILayout.ToggleLeft("Use Default Touch Code For Key Code", m_Setting.useDefaultTouchCodeForKeyCode);
-            EditorGUILayout.LabelField("Key Code Config",GUICustomStyle.CenteredBigLabel);
-            EditorGUILayout.LabelField("Waiting Time For Each Press");
-            m_Setting.waitingTimeForEachPress = EditorGUILayout.FloatField(m_Setting.waitingTimeForEachPress);
-            EditorGUILayout.LabelField("Touch Code Config",GUICustomStyle.CenteredBigLabel);
-            EditorGUILayout.LabelField("Number Of Touches Required To Enter Debug Mode");
-            m_Setting.numberOfTouchesRequiredToEnterDebugMode = EditorGUILayout.IntField(m_Setting.numberOfTouchesRequiredToEnterDebugMode);
-            EditorGUILayout.LabelField("Longest Time Waiting For Next Touch Check");
-            m_Setting.longestTimeWaitingForNextTouchCheck = EditorGUILayout.FloatField(m_Setting.longestTimeWaitingForNextTouchCheck);
-            EditorGUILayout.LabelField("Longest Time Holding Touch");
-            m_Setting.longestTimeHoldingTouch = EditorGUILayout.FloatField(m_Setting.longestTimeHoldingTouch);
-            EditorGUILayout.EndVertical();
+            if (GUILayout.Button("Config", GUICustomStyle.StandardButtonStyle))
+            {
+                m_Setting.showConfig = !m_Setting.showConfig;
+            }
+
+            if (m_Setting.showConfig)
+            {
+                EditorGUILayout.BeginVertical(GUICustomStyle.BorderAreaStyle);
+                DrawEnableForBuild();
+                m_Setting.useDefaultTouchCodeForKeyCode = EditorGUILayout.ToggleLeft("Use Default Touch Code For Key Code", m_Setting.useDefaultTouchCodeForKeyCode);
+                GUILayout.Space(8);
+                EditorGUILayout.LabelField("Key Code Config",GUICustomStyle.CenteredBigLabel);
+                EditorGUILayout.LabelField("Waiting Time For Each Press");
+                m_Setting.waitingTimeForEachPress = EditorGUILayout.FloatField(m_Setting.waitingTimeForEachPress);
+                GUILayout.Space(8);
+                EditorGUILayout.LabelField("Touch Code Config",GUICustomStyle.CenteredBigLabel);
+                EditorGUILayout.LabelField("Number Of Touches Required To Enter Debug Mode");
+                m_Setting.numberOfTouchesRequiredToEnterDebugMode = EditorGUILayout.IntField(m_Setting.numberOfTouchesRequiredToEnterDebugMode);
+                EditorGUILayout.LabelField("Longest Time Waiting For Next Touch Check");
+                m_Setting.longestTimeWaitingForNextTouchCheck = EditorGUILayout.FloatField(m_Setting.longestTimeWaitingForNextTouchCheck);
+                EditorGUILayout.LabelField("Longest Time Holding Touch");
+                m_Setting.longestTimeHoldingTouch = EditorGUILayout.FloatField(m_Setting.longestTimeHoldingTouch);
+                EditorGUILayout.EndVertical();   
+            }
             GUILayout.Space(5);
             if (m_MethodInfo == null)
             {

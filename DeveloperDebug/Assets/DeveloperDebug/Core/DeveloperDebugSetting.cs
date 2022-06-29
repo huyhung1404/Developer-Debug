@@ -14,6 +14,7 @@ namespace DeveloperDebug.Core
         public float longestTimeHoldingTouch = 0.75f;
         public bool useDefaultTouchCodeForKeyCode;
         public List<DeveloperDebugSettingData> debugData;
+        public bool showConfig = true;
         public bool showEnableList = true;
         public bool showEditorOnlyList = true;
         public bool showDisableList = true;
