@@ -38,7 +38,7 @@ MonoBehaviour:
     touchCode: 
     editorOnly: 0
     editTouchCode: 0
-  showConfig: 1
-  showEnableList: 1
-  showEditorOnlyList: 1
+  showConfig: 0
+  showEnableList: 0
+  showEditorOnlyList: 0
   showDisableList: 0

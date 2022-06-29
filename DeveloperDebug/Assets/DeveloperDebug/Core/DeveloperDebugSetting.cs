@@ -28,7 +28,8 @@ namespace DeveloperDebug.Core
             var _minTouchCodeValue = (int) Math.Pow(10, minLengthTouchCode - 1);
             var _data = new Dictionary<string, Action>();
             var _methods = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);
-            for (var i = _methods.Length - 1; i >= 0; i--)
+            var _methodsCount = _methods.Length;
+            for (var i = 0; i < _methodsCount; i++)
             {
                 var _method = _methods[i];
                 var _debugData = debugData.Find(item => string.Equals(item.functionName, _method.Name));

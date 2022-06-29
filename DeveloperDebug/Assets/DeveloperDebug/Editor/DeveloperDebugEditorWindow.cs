@@ -5,6 +5,7 @@ namespace DeveloperDebug.Editor
     using Core;
     using UnityEditor;
     using UnityEngine;
+
     public class DeveloperDebugEditorWindow : EditorWindow
     {
         private static DeveloperDebugEditorWindow m_Window;
@@ -18,8 +19,8 @@ namespace DeveloperDebug.Editor
         public static void OpenPopupWindow()
         {
             m_Window = GetWindow<DeveloperDebugEditorWindow>("Developer Debug");
-            m_Window.maxSize = new Vector2(600, 100);
-            m_Window.minSize = new Vector2(600, 35);
+            m_Window.maxSize = new Vector2(600, 160);
+            m_Window.minSize = new Vector2(600, 55);
             m_Window.Init();
         }
 
@@ -44,6 +45,7 @@ namespace DeveloperDebug.Editor
                 EditorGUI.FocusTextInControl("textCodeField");
                 m_FocusTextField = true;
             }
+
             GUI.SetNextControlName("buttonSetting");
             if (GUILayout.Button("Go To Developer Debug Setting"))
             {
@@ -71,38 +73,34 @@ namespace DeveloperDebug.Editor
         private void DrawKeyValue()
         {
             EditorGUILayout.LabelField($"Has {m_KeyCodeData.Count} key code", EditorStyles.centeredGreyMiniLabel);
-            m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(600), GUILayout.Height(80));
-            var totalRow = (int)Math.Ceiling(m_KeyCodeData.Count / 3f);
-            for (var i = 0; i < totalRow; i++)
+            m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(600), GUILayout.Height(100));
+            var _index = 0;
+            foreach (var KeyCode in m_KeyCodeData)
             {
-                DrawRow(i);
-            }
-            
-            EditorGUILayout.EndScrollView();
-        }
+                var _residuals = _index % 3;
+                if (_residuals == 0) EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button(KeyCode.Key))
+                {
+                    KeyCode.Value.Invoke();
+                    m_Window.Close();
+                }
 
-        private void DrawRow(int i)
-        {
-            // EditorGUILayout.BeginHorizontal();
-            // var keyIndex = _keyData.Count - 1;
-            // EditorGUILayout.LabelField(i * 3 <= keyIndex ? _keyData[i * 3] : "");
-            // EditorGUILayout.LabelField(i * 3 + 1 <= keyIndex ? _keyData[i * 3 + 1] : "");
-            // EditorGUILayout.LabelField(i * 3 + 2 <= keyIndex ? _keyData[i * 3 + 2] : "");
-            // EditorGUILayout.EndHorizontal();
+                if (_residuals == 2) EditorGUILayout.EndHorizontal();
+                _index++;
+            }
+            EditorGUILayout.EndScrollView();
         }
 
         private void ExecuteDeveloperCode()
         {
-            // if (string.IsNullOrEmpty(_textCode)) return;
-            // // var dic = DeveloperDebugKeyCode.GetData();
-            // // if (dic.ContainsKey(_textCode))
-            // // {
-            // //     dic[_textCode]?.Invoke();
-            // //     Debug.Log("Execute");
-            // //     return;
-            // // }
-            //
-            // Debug.LogError("Key does not exist");
+            if (string.IsNullOrEmpty(m_TextCode)) return;
+            if (m_KeyCodeData.ContainsKey(m_TextCode))
+            {
+                m_KeyCodeData[m_TextCode]?.Invoke();
+                Debug.Log("Execute");
+                return;
+            }
+            Debug.LogError("Key does not exist");
         }
     }
 }
