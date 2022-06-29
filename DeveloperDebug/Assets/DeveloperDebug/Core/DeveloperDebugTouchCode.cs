@@ -21,7 +21,7 @@ namespace DeveloperDebug.Core
         private float m_TimeCheckTouch;
         private float m_TimeHolding;
         private readonly int[] m_TempInput = new int[4];
-        private string m_InputCode;
+        private int m_InputCode;
         private bool m_WaitCheckingDebugMode;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -77,30 +77,33 @@ namespace DeveloperDebug.Core
                     if (_touchCount != 0) m_TempInput[_touchCount - 1]++;
                     if (m_TimeHolding >= m_LongestTimeHoldingTouch)
                     {
-                        AddCode(_touchCount);
+                        m_InputCode = m_InputCode * 10 + _touchCount;
                         EndCheckTouchCode();
                         return;
                     }
                 }
-                
+
                 if (m_LastTouchCount == _touchCount) return;
-                
+
                 if (m_LastTouchCount == 0)
                 {
-                    m_TimeHolding = 0;
-                    m_TempInput[0] = m_TempInput[1] = m_TempInput[2] = m_TempInput[3] = 0;
-                }else if (_touchCount == 0)
+                    m_TimeHolding = m_TempInput[0] = m_TempInput[1] = m_TempInput[2] = m_TempInput[3] = 0;
+                }
+                else if (_touchCount == 0)
                 {
                     m_TimeHolding = -1;
                     m_TimeCheckTouch = 0;
-                    AddCode(GetCodeInput());
+                    m_InputCode = m_InputCode * 10 + GetCodeInput();
                 }
+
                 m_LastTouchCount = _touchCount;
                 return;
             }
 
             if (!m_WaitCheckingDebugMode || _touchCount != 0) return;
-            StartCheckDebug();
+            m_WaitCheckingDebugMode = false;
+            m_TimeCheckTouch = m_LastTouchCount = m_InputCode = 0;
+            m_TimeHolding = -1;
         }
 
         private int GetCodeInput()
@@ -111,22 +114,9 @@ namespace DeveloperDebug.Core
                 if (m_TempInput[i] <= m_TempInput[_max]) continue;
                 _max = i;
             }
-            return _max;
+            return _max + 1;
         }
-
-        private void StartCheckDebug()
-        {
-            m_WaitCheckingDebugMode = false;
-            m_TimeCheckTouch = m_LastTouchCount = 0;
-            m_TimeHolding = -1;
-            m_InputCode = "";
-        }
-
-        private void AddCode(int touchCount)
-        {
-            m_InputCode += touchCount.ToString();
-        }
-
+        
         private void EndCheckTouchCode()
         {
             m_DebugMode = false;
