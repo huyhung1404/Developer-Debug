@@ -67,11 +67,20 @@ namespace DeveloperDebug.Core
         private void EndCheckingKeyCode()
         {
             m_WaitTimeKeyCode = 0;
+#if UNITY_EDITOR
+            if (m_CurrentInputKeyCode.Length < 4)
+            {
+                m_CurrentInputKeyCode.Clear();
+                return;
+            }
+#else
             if (m_CurrentInputKeyCode.Length < 5)
             {
                 m_CurrentInputKeyCode.Clear();
                 return;
             }
+#endif
+            
 
             var _input = m_CurrentInputKeyCode.ToString();
             if (m_KeyCodeData.ContainsKey(_input))

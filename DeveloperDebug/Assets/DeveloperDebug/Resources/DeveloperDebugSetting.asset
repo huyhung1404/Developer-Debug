@@ -16,7 +16,7 @@ MonoBehaviour:
   numberOfTouchesRequiredToEnterDebugMode: 5
   longestTimeWaitingForNextTouchCheck: 2
   longestTimeHoldingTouch: 0.75
-  useDefaultTouchCodeForKeyCode: 0
+  useDefaultTouchCodeForKeyCode: 1
   debugData:
   - enable: 1
     functionName: DebugFunc1
@@ -36,3 +36,6 @@ MonoBehaviour:
     touchCode: 
     editorOnly: 0
     editTouchCode: 0
+  showEnableList: 1
+  showEditorOnlyList: 0
+  showDisableList: 0

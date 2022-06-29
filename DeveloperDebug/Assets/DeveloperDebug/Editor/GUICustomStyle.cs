@@ -11,6 +11,7 @@ namespace DeveloperDebug.Editor
         public static GUIStyle ArrowButtonStyle { get; }
         public static GUIStyle EditButtonStyle { get; }
         public static GUIStyle EditTextFieldStyle { get; }
+        public static GUIStyle BorderAreaStyle { get; }
 
         static GUICustomStyle()
         {
@@ -41,6 +42,16 @@ namespace DeveloperDebug.Editor
                 padding = new RectOffset(5, 0, 0, 0),
                 fontSize = 13,
                 normal =
+                {
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    background = null
+                },
+                hover = 
+                {
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    background = null
+                },
+                focused = 
                 {
                     textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
                     background = null
@@ -115,7 +126,12 @@ namespace DeveloperDebug.Editor
                 {
                     textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
                     background = null
-                }
+                },
+            };
+
+            BorderAreaStyle = new GUIStyle(EditorStyles.helpBox)
+            {
+                padding = new RectOffset(8,8,8,8),
             };
         }
 

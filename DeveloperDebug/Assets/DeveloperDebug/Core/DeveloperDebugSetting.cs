@@ -14,6 +14,9 @@ namespace DeveloperDebug.Core
         public float longestTimeHoldingTouch = 0.75f;
         public bool useDefaultTouchCodeForKeyCode;
         public List<DeveloperDebugSettingData> debugData;
+        public bool showEnableList = true;
+        public bool showEditorOnlyList = true;
+        public bool showDisableList = true;
         
 #if (DEVELOPER_DEBUG && !UNITY_ANDROID && !UNITY_IOS) || UNITY_EDITOR
         public Dictionary<string,Action> GetKeyCodeData()
