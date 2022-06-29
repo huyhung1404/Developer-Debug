@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
-
 namespace DeveloperDebug.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using UnityEngine;
+    
     [Serializable]
     public class DeveloperDebugSetting : ScriptableObject
     {
@@ -12,57 +12,67 @@ namespace DeveloperDebug.Core
         public int numberOfTouchesRequiredToEnterDebugMode = 5;
         public float longestTimeWaitingForNextTouchCheck = 2f;
         public float longestTimeHoldingTouch = 0.75f;
+        public bool useDefaultTouchCodeForKeyCode;
         public List<DeveloperDebugSettingData> debugData;
-        private Dictionary<string, Action> m_KeyCodeData;
-        private Dictionary<int, Action> m_TouchCodeData;
         
-        private void OnEnable()
-        {
-            m_KeyCodeData = new Dictionary<string, Action>();
-            m_TouchCodeData = new Dictionary<int, Action>();
-            var methods = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);
-            for (var i = methods.Length - 1; i >= 0; i--)
-            {
-                var method = methods[i];
-                var developerFuncData = debugData.Find(item => string.Equals(item.functionName,method.Name));
-                if (developerFuncData != null)
-                {
-                    if(!developerFuncData.enable) continue;
-#if !UNITY_EDITOR
-                    if(developerFuncData.editorOnly) continue;
-#endif
-                    Action action = null;
-                    // if (!string.IsNullOrEmpty(developerFuncData.keyCode))
-                    // {
-                    //     action = (Action) Delegate.CreateDelegate(typeof(Action), method);
-                    //     m_KeyCodeData.Add(developerFuncData.keyCode,action);
-                    // }
-                    //
-                    // if (!string.IsNullOrEmpty(developerFuncData.touchCode))
-                    // {
-                    //     if(action == null) action = (Action) Delegate.CreateDelegate(typeof(Action), method);
-                    //     m_TouchData.Add(developerFuncData.touchCode,action);
-                    // }
-                }
-            }
-        }
-
+#if (DEVELOPER_DEBUG && !UNITY_ANDROID && !UNITY_IOS) || UNITY_EDITOR
         public Dictionary<string,Action> GetKeyCodeData()
         {
-            return m_KeyCodeData;
-        }
-
-        public Dictionary<int,Action> GetTouchData()
-        {
-            return new Dictionary<int, Action>
+            var _data = new Dictionary<string, Action>();
+            var _methods = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);
+            for (var i = _methods.Length - 1; i >= 0; i--)
             {
-                {2234, () =>
+                var _method = _methods[i];
+                var _debugData = debugData.Find(item => string.Equals(item.functionName,_method.Name));
+                if (_debugData != null)
                 {
-                    Debug.LogError("RUn");
-                }}
-            };
-            return m_TouchCodeData;
+                    if(!_debugData.enable) continue;
+#if !UNITY_EDITOR
+                    if(_debugData.editorOnly) continue;
+#endif
+                    Action _action;
+                    if (!string.IsNullOrEmpty(_debugData.keyCode))
+                    {
+                        if(_debugData.keyCode.Length < 5) continue;
+                        _action = (Action) Delegate.CreateDelegate(typeof(Action), _method);
+                        _data.Add(_debugData.keyCode,_action);
+                        continue;
+                    }
+
+                    if (!useDefaultTouchCodeForKeyCode || string.IsNullOrEmpty(_debugData.touchCode) || int.Parse(_debugData.touchCode) <= 1000) continue;
+                    _action = (Action) Delegate.CreateDelegate(typeof(Action), _method);
+                    _data.Add(_debugData.touchCode,_action);
+                }
+            }
+            return _data;
         }
+#endif
+        
+#if ((DEVELOPER_DEBUG && UNITY_ANDROID) || (DEVELOPER_DEBUG && UNITY_IOS)) && !UNITY_EDITOR
+        public Dictionary<int,Action> GetTouchCodeData()
+        {
+            var _data = new Dictionary<int, Action>();
+            var _methods = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);
+            for (var i = _methods.Length - 1; i >= 0; i--)
+            {
+                var _method = _methods[i];
+                var _debugData = debugData.Find(item => string.Equals(item.functionName,_method.Name));
+                if (_debugData != null)
+                {
+                    if(!_debugData.enable) continue;
+#if !UNITY_EDITOR
+                    if(_debugData.editorOnly) continue;
+#endif
+                    if(string.IsNullOrEmpty(_debugData.touchCode)) continue;
+                    var _code = int.Parse(_debugData.touchCode);
+                    if (_code <= 1000) continue;
+                    var _action = (Action) Delegate.CreateDelegate(typeof(Action), _method);
+                    _data.Add(_code,_action);
+                }
+            }
+            return _data;
+        }
+#endif
     }
 
     [Serializable]

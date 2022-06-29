@@ -28,7 +28,7 @@ namespace DeveloperDebug.Core
         private static void Init()
         {
             var _setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
-            m_TouchCodeData = _setting.GetTouchData();
+            m_TouchCodeData = _setting.GetTouchCodeData();
             m_NumberOfTouchesRequiredToEnterDebugMode = _setting.numberOfTouchesRequiredToEnterDebugMode;
             m_LongestTimeWaitingForNextTouchCheck = _setting.longestTimeWaitingForNextTouchCheck;
             m_LongestTimeHoldingTouch = _setting.longestTimeHoldingTouch;

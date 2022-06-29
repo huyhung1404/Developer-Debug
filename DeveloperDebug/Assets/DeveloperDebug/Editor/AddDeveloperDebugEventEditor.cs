@@ -33,7 +33,7 @@ namespace DeveloperDebug.Editor
             EditorGUILayout.LabelField("TouchCode",GUICustomStyle.MiddleLeftBoldMiniLabel);
             EditorGUILayout.BeginHorizontal();
             GUI.enabled = false;
-            data.touchCode = DeveloperDebugSettingEditor.ChangeGraphicToTouch(EditorGUILayout.TextField(DeveloperDebugSettingEditor.ChangeTouchCodeToGraphic(data.touchCode),GUICustomStyle.EditTextFieldStyle));
+            data.touchCode = EditorGUILayout.TextField(data.touchCode,GUICustomStyle.EditTextFieldStyle);
             GUI.enabled = enable;
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(5);

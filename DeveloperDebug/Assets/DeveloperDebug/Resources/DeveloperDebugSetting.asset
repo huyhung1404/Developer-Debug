@@ -13,22 +13,26 @@ MonoBehaviour:
   m_Name: DeveloperDebugSetting
   m_EditorClassIdentifier: 
   waitingTimeForEachPress: 1
+  numberOfTouchesRequiredToEnterDebugMode: 5
+  longestTimeWaitingForNextTouchCheck: 2
+  longestTimeHoldingTouch: 0.75
+  useDefaultTouchCodeForKeyCode: 0
   debugData:
   - enable: 1
     functionName: DebugFunc1
-    keyCode: debug1
-    touchCode: UUDD
+    keyCode: 
+    touchCode: 1223
     editorOnly: 0
-    editTouchCode: 0
+    editTouchCode: 1
   - enable: 0
     functionName: DebugFunc2
     keyCode: 
     touchCode: 
     editorOnly: 0
     editTouchCode: 0
-  - enable: 1
+  - enable: 0
     functionName: DebugFunc3
-    keyCode: debug3
-    touchCode: DDUULR
+    keyCode: 
+    touchCode: 
     editorOnly: 0
     editTouchCode: 0

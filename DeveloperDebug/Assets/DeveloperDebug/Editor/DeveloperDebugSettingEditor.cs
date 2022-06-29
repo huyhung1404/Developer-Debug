@@ -114,7 +114,7 @@ namespace DeveloperDebug.Editor
             EditorGUILayout.BeginHorizontal();
             GUI.enabled = false;
             
-            data.touchCode = ChangeGraphicToTouch(EditorGUILayout.TextField(ChangeTouchCodeToGraphic(data.touchCode),GUICustomStyle.EditTextFieldStyle));
+            data.touchCode = EditorGUILayout.TextField(data.touchCode,GUICustomStyle.EditTextFieldStyle);
             
             GUI.enabled = data.enable;
             if (GUILayout.Button("Edit", GUICustomStyle.EditButtonStyle))
@@ -198,21 +198,21 @@ namespace DeveloperDebug.Editor
             GUILayout.Space(5);
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("←", GUICustomStyle.ArrowButtonStyle))
+            if (GUILayout.Button("1", GUICustomStyle.ArrowButtonStyle))
             {
-                data.touchCode += 'L';
+                data.touchCode += '1';
             }
-            if(GUILayout.Button("→",GUICustomStyle.ArrowButtonStyle))
+            if(GUILayout.Button("2",GUICustomStyle.ArrowButtonStyle))
             {
-                data.touchCode += 'R';
+                data.touchCode += '2';
             }
-            if(GUILayout.Button("↑",GUICustomStyle.ArrowButtonStyle))
+            if(GUILayout.Button("3",GUICustomStyle.ArrowButtonStyle))
             {
-                data.touchCode += 'U';
+                data.touchCode += '3';
             }
-            if(GUILayout.Button("↓",GUICustomStyle.ArrowButtonStyle))
+            if(GUILayout.Button("4",GUICustomStyle.ArrowButtonStyle))
             {
-                data.touchCode += 'D';
+                data.touchCode += '4';
             }
             if(GUILayout.Button("X",GUICustomStyle.ArrowButtonStyle))
             {
@@ -220,16 +220,6 @@ namespace DeveloperDebug.Editor
             }
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
-        }
-
-        public static string ChangeTouchCodeToGraphic(string touchCode)
-        {
-            return string.IsNullOrEmpty(touchCode) ? null : touchCode.Replace('L', '←').Replace('R', '→').Replace('U', '↑').Replace('D', '↓');
-        }
-        
-        public static string ChangeGraphicToTouch(string graphic)
-        {
-            return string.IsNullOrEmpty(graphic) ? null : graphic.Replace('←','L').Replace('→','R').Replace('↑','U').Replace('↓','D');
         }
     }
 }
