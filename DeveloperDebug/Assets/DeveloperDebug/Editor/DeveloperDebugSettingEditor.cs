@@ -151,9 +151,9 @@ namespace DeveloperDebug.Editor
             EditorGUILayout.LabelField(data.functionName, GUICustomStyle.CenteredBigLabel);
             EditorGUILayout.Space(8);
             EditorGUILayout.BeginHorizontal();
-            data.enable = EditorGUILayout.ToggleLeft("Enable", data.enable, GUICustomStyle.MiddleLeftBoldMiniLabel, GUILayout.MaxWidth(80));
+            data.enable = EditorGUILayout.ToggleLeft("Enable", data.enable, GUICustomStyle.MiddleLeftBoldMiniLabel, GUILayout.MaxWidth(90));
             GUI.enabled = data.enable;
-            data.editorOnly = EditorGUILayout.ToggleLeft("Editor Only", data.editorOnly,GUICustomStyle.MiddleLeftBoldMiniLabel, GUILayout.MaxWidth(80));
+            data.editorOnly = EditorGUILayout.ToggleLeft("Editor Only", data.editorOnly,GUICustomStyle.MiddleLeftBoldMiniLabel, GUILayout.MaxWidth(90));
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(8);
             EditorGUILayout.LabelField("KeyCode", GUICustomStyle.MiddleLeftBoldMiniLabel);
