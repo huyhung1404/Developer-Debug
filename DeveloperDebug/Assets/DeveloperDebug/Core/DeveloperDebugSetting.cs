@@ -11,7 +11,6 @@ namespace DeveloperDebug.Core
         public float waitingTimeForEachPress = 1;
         public int numberOfTouchesRequiredToEnterDebugMode = 5;
         public float longestTimeWaitingForNextTouchCheck = 1.5f;
-        public float timeHoldingTouch = 0.3f;
         public List<DeveloperDebugSettingData> debugData;
         private Dictionary<string, Action> m_KeyCodeData;
         private Dictionary<int, Action> m_TouchCodeData;

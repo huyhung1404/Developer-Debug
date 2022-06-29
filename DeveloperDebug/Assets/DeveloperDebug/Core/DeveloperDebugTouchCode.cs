@@ -10,14 +10,21 @@ namespace DeveloperDebug.Core
     {
         #region Core
 
+        private enum StateDebug
+        {
+            CheckDebug,
+            DebugMode
+        }
+        
         private static bool m_Enable;
         private static Dictionary<int, Action> m_TouchCodeData;
         private static int m_NumberOfTouchesRequiredToEnterDebugMode;
         private static float m_LongestTimeWaitingForNextTouchCheck;
-        private static float m_TimeHoldingTouch;
 
         private int m_LastTouchCount;
-        private float m_TimeChangeTouchCount;
+        private StateDebug m_State;
+        private bool m_DebugMode;
+        private float m_TimeCheckTouch;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Init()
@@ -26,7 +33,6 @@ namespace DeveloperDebug.Core
             m_TouchCodeData = _setting.GetTouchData();
             m_NumberOfTouchesRequiredToEnterDebugMode = _setting.numberOfTouchesRequiredToEnterDebugMode;
             m_LongestTimeWaitingForNextTouchCheck = _setting.longestTimeWaitingForNextTouchCheck;
-            m_TimeHoldingTouch = _setting.timeHoldingTouch;
             var _instance = new GameObject().AddComponent<DeveloperDebugTouchCode>();
             _instance.name = _instance.GetType().Name;
         }
@@ -37,35 +43,61 @@ namespace DeveloperDebug.Core
             DontDestroyOnLoad(gameObject);
         }
 
-        private string test;
 
         private void Update()
         {
             if (!m_Enable) return;
             var _touchCount = Input.touchCount;
-            var _deltaTime = Time.deltaTime;
-            // if (_touchCount == m_NumberOfTouchesRequiredToEnterDebugMode)
-            // {
-                
-            // }
-            m_TimeChangeTouchCount += _deltaTime;
-            if (m_LastTouchCount != _touchCount)
-            {
-                m_TimeChangeTouchCount = 0;
-                if (m_TimeChangeTouchCount >= m_TimeHoldingTouch)
-                {
-                    test += _touchCount.ToString();
-                    Debug.Log(test);
-                }
-            }
-            m_LastTouchCount = _touchCount;
-        }
 
-        private void CheckTouchCount(int lastTouchCount,int currentTouchCount)
+            if (!m_DebugMode)
+            {
+                if (_touchCount != m_NumberOfTouchesRequiredToEnterDebugMode) return;
+                m_State = StateDebug.CheckDebug;
+                m_DebugMode = true;
+                return;
+            }
+
+            switch (m_State)
+            {
+                case StateDebug.CheckDebug:
+                    if (_touchCount == 0)
+                    {
+                        m_State = StateDebug.DebugMode;
+                        m_TimeCheckTouch = 0;
+                        m_LastTouchCount = 0;
+                        return;
+                    }
+                    m_DebugMode = _touchCount == m_NumberOfTouchesRequiredToEnterDebugMode;
+                    return;
+                case StateDebug.DebugMode:
+                    var _time = Time.deltaTime;
+                    m_TimeCheckTouch += _time;
+                    if (m_TimeCheckTouch >= m_LongestTimeWaitingForNextTouchCheck)
+                    {
+                        EndCheckTouchCode();
+                        m_DebugMode = false;
+                        return;
+                    }
+
+                    if (m_LastTouchCount != _touchCount)
+                    {
+                        if (m_LastTouchCount == 0)
+                        {
+                            
+                        }   
+                        
+                        m_LastTouchCount = _touchCount;
+                    }
+                    return;
+            }
+        }
+        
+        
+
+        private void EndCheckTouchCode()
         {
             
         }
-
 
         #endregion
 
