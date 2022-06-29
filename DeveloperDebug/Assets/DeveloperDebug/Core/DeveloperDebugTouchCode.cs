@@ -24,7 +24,7 @@ namespace DeveloperDebug.Core
         private int m_InputCode;
         private bool m_WaitCheckingDebugMode;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
             var _setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");

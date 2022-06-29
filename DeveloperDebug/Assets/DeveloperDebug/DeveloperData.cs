@@ -1,9 +1,7 @@
-using UnityEngine;
-
 #if UNITY_EDITOR || DEVELOPER_DEBUG
-
 namespace DeveloperDebug
 {
+    using UnityEngine;
     public static class DeveloperData
     {
         public static void DebugFunc1()

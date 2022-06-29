@@ -5,7 +5,6 @@ namespace DeveloperDebug.Core
     using System.Text;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public class DeveloperDebugKeyCode : MonoBehaviour
     {
@@ -19,7 +18,7 @@ namespace DeveloperDebug.Core
         private float m_WaitTimeKeyCode;
         private StringBuilder m_CurrentInputKeyCode;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
             var _setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
@@ -62,10 +61,10 @@ namespace DeveloperDebug.Core
 
         private void CheckingKeycode()
         {
-            var inputString = Input.inputString;
-            if (string.IsNullOrEmpty(inputString)) return;
+            var _inputString = Input.inputString;
+            if (string.IsNullOrEmpty(_inputString)) return;
             m_WaitTimeKeyCode = m_WaitingTimeForEachPress;
-            m_CurrentInputKeyCode.Append(inputString);
+            m_CurrentInputKeyCode.Append(_inputString);
         }
 
         private void EndCheckingKeyCode()
@@ -88,16 +87,6 @@ namespace DeveloperDebug.Core
         #endregion
 
         #region Public Method
-
-        public static List<string> GetKeyData()
-        {
-            return m_KeyCodeData.Select(pair => pair.Key).ToList();
-        }
-
-        public static Dictionary<string, Action> GetData()
-        {
-            return m_KeyCodeData;
-        }
 
         public static void Register(string key, Action action)
         {

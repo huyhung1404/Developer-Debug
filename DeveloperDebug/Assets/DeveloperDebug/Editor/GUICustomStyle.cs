@@ -134,12 +134,5 @@ namespace DeveloperDebug.Editor
                 padding = new RectOffset(8, 8, 8, 8),
             };
         }
-
-        public static void GuiLine(int height = 1)
-        {
-            var _rect = EditorGUILayout.GetControlRect(false, height);
-            _rect.height = height;
-            EditorGUI.DrawRect(_rect, new Color(0.5f, 0.5f, 0.5f, 1));
-        }
     }
 }

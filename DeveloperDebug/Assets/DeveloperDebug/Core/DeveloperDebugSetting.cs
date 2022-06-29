@@ -24,6 +24,7 @@ namespace DeveloperDebug.Core
 #if (DEVELOPER_DEBUG && !UNITY_ANDROID && !UNITY_IOS) || UNITY_EDITOR
         public Dictionary<string, Action> GetKeyCodeData()
         {
+            AddDeveloperDebugEvent.UseDefaultTouchCodeForKeyCode = useDefaultTouchCodeForKeyCode;
             var _minTouchCodeValue = (int) Math.Pow(10, minLengthTouchCode - 1);
             var _data = new Dictionary<string, Action>();
             var _methods = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);
@@ -60,6 +61,7 @@ namespace DeveloperDebug.Core
 #if ((DEVELOPER_DEBUG && UNITY_ANDROID) || (DEVELOPER_DEBUG && UNITY_IOS)) && !UNITY_EDITOR
         public Dictionary<int,Action> GetTouchCodeData()
         {
+            AddDeveloperDebugEvent.UseDefaultTouchCodeForKeyCode = useDefaultTouchCodeForKeyCode;
             var _minTouchCodeValue = (int) Math.Pow(10, minLengthTouchCode - 1);
             var _data = new Dictionary<int, Action>();
             var _methods = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);

@@ -4,7 +4,7 @@ namespace DeveloperDebug.Core
     using System.Text.RegularExpressions;
     using UnityEngine;
     
-    public class DeveloperDebugExtension
+    public static class DeveloperDebugExtension
     {
         private static readonly Regex m_TouchCodeRegex = new Regex(@"^[1234]*$");
         
@@ -58,7 +58,7 @@ namespace DeveloperDebug.Core
 #endif
         }
 
-        public static void UnregisterTouchDebug(int key)
+        public static void UnregisterTouchCode(int key)
         {
 #if UNITY_EDITOR
             DeveloperDebugKeyCode.Unregister(key.ToString());

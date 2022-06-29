@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using DeveloperDebug.Core;
-using UnityEditor;
-using UnityEngine;
-
 namespace DeveloperDebug.Editor
 {
+    using System;
+    using System.Collections.Generic;
+    using DeveloperDebug.Core;
+    using UnityEditor;
+    using UnityEngine;
     public class DeveloperDebugEditorWindow : EditorWindow
     {
         private static DeveloperDebugEditorWindow _window;
@@ -29,7 +28,7 @@ namespace DeveloperDebug.Editor
             _textCode = string.Empty;
             _focusTextField = false;
             _keyData.Clear();
-            _keyData = DeveloperDebugKeyCode.GetKeyData();
+            // _keyData = DeveloperDebugKeyCode.GetKeyData();
             _keyCount = _keyData.Count;
         }
 
@@ -87,13 +86,13 @@ namespace DeveloperDebug.Editor
         private void ExecuteDeveloperCode()
         {
             if (string.IsNullOrEmpty(_textCode)) return;
-            var dic = DeveloperDebugKeyCode.GetData();
-            if (dic.ContainsKey(_textCode))
-            {
-                dic[_textCode]?.Invoke();
-                Debug.Log("Execute");
-                return;
-            }
+            // var dic = DeveloperDebugKeyCode.GetData();
+            // if (dic.ContainsKey(_textCode))
+            // {
+            //     dic[_textCode]?.Invoke();
+            //     Debug.Log("Execute");
+            //     return;
+            // }
 
             Debug.LogError("Key does not exist");
         }

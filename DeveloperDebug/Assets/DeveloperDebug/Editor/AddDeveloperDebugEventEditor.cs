@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using DeveloperDebug.Core;
-using UnityEngine;
-
 namespace DeveloperDebug.Editor
 {
     using UnityEditor;
+    using Core;
+    using UnityEngine;
 
     [CustomEditor(typeof(AddDeveloperDebugEvent))]
     public class AddDeveloperDebugEventEditor : Editor
@@ -13,11 +11,10 @@ namespace DeveloperDebug.Editor
 
         public override void OnInspectorGUI()
         {
-            var data = (AddDeveloperDebugEvent) target;
+            var _data = (AddDeveloperDebugEvent)target;
             serializedObject.Update();
-            if (m_Setting == null)
-                m_Setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
-            DrawData(data.dataAdd, data.enabled, data.debugEvent.GetPersistentEventCount());
+            if (ReferenceEquals(m_Setting,null)) m_Setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
+            DrawData(_data.dataAdd, _data.enabled, _data.debugEvent.GetPersistentEventCount());
             if (!GUI.changed) return;
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(target);
@@ -39,12 +36,15 @@ namespace DeveloperDebug.Editor
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(5);
             DeveloperDebugSettingEditor.DrawButtonTouch(data);
-            var debugEvent = serializedObject.FindProperty("debugEvent");
+            var _debugEvent = serializedObject.FindProperty("debugEvent");
             EditorGUILayout.Space(5);
-            EditorGUILayout.PropertyField(debugEvent);
+            EditorGUILayout.PropertyField(_debugEvent);
             EditorGUILayout.Space(5);
             GUI.enabled = true;
-            if (enable) DeveloperDebugSettingEditor.CheckCorrect(data.keyCode, data.touchCode, m_Setting.debugData,m_Setting.minLengthKeyCode,m_Setting.minLengthTouchCode,eventCount);
+            if (enable)
+            {
+                DeveloperDebugSettingEditor.CheckCorrect(data.keyCode, data.touchCode, m_Setting.debugData, m_Setting.minLengthKeyCode, m_Setting.minLengthTouchCode, eventCount);
+            }
             EditorGUILayout.Space(10);
         }
     }
