@@ -7,7 +7,7 @@ namespace DeveloperDebug.Editor
     using System.Linq;
     using System.Reflection;
     using UnityEngine;
-    
+
     [CustomEditor(typeof(DeveloperDebugSetting))]
     public class DeveloperDebugSettingEditor : Editor
     {
@@ -16,6 +16,7 @@ namespace DeveloperDebug.Editor
         private readonly List<int> m_EnableList = new List<int>();
         private readonly List<int> m_EditorOnlyList = new List<int>();
         private readonly List<int> m_DisableList = new List<int>();
+
         public override void OnInspectorGUI()
         {
             m_Setting = (DeveloperDebugSetting) target;
@@ -30,34 +31,47 @@ namespace DeveloperDebug.Editor
             {
                 EditorGUILayout.BeginVertical(GUICustomStyle.BorderAreaStyle);
                 DrawEnableForBuild();
-                m_Setting.useDefaultTouchCodeForKeyCode = EditorGUILayout.ToggleLeft("Use Default Touch Code For Key Code", m_Setting.useDefaultTouchCodeForKeyCode);
+                m_Setting.useDefaultTouchCodeForKeyCode =
+                    EditorGUILayout.ToggleLeft("Use Default Touch Code For Key Code",
+                        m_Setting.useDefaultTouchCodeForKeyCode);
                 GUILayout.Space(8);
-                EditorGUILayout.LabelField("Key Code Config",GUICustomStyle.CenteredBigLabel);
+                EditorGUILayout.LabelField("Key Code Config", GUICustomStyle.CenteredBigLabel);
                 EditorGUILayout.LabelField("Waiting Time For Each Press");
                 m_Setting.waitingTimeForEachPress = EditorGUILayout.FloatField(m_Setting.waitingTimeForEachPress);
+                EditorGUILayout.LabelField("Min Length Key Code");
+                m_Setting.minLengthKeyCode = EditorGUILayout.IntField(m_Setting.minLengthKeyCode);
                 GUILayout.Space(8);
-                EditorGUILayout.LabelField("Touch Code Config",GUICustomStyle.CenteredBigLabel);
+                EditorGUILayout.LabelField("Touch Code Config", GUICustomStyle.CenteredBigLabel);
                 EditorGUILayout.LabelField("Number Of Touches Required To Enter Debug Mode");
-                m_Setting.numberOfTouchesRequiredToEnterDebugMode = EditorGUILayout.IntField(m_Setting.numberOfTouchesRequiredToEnterDebugMode);
+                m_Setting.numberOfTouchesRequiredToEnterDebugMode =
+                    EditorGUILayout.IntField(m_Setting.numberOfTouchesRequiredToEnterDebugMode);
                 EditorGUILayout.LabelField("Longest Time Waiting For Next Touch Check");
-                m_Setting.longestTimeWaitingForNextTouchCheck = EditorGUILayout.FloatField(m_Setting.longestTimeWaitingForNextTouchCheck);
+                m_Setting.longestTimeWaitingForNextTouchCheck =
+                    EditorGUILayout.FloatField(m_Setting.longestTimeWaitingForNextTouchCheck);
                 EditorGUILayout.LabelField("Longest Time Holding Touch");
                 m_Setting.longestTimeHoldingTouch = EditorGUILayout.FloatField(m_Setting.longestTimeHoldingTouch);
-                EditorGUILayout.EndVertical();   
+                EditorGUILayout.LabelField("Min Length Touch Code");
+                m_Setting.minLengthTouchCode = EditorGUILayout.IntField(m_Setting.minLengthTouchCode);
+                EditorGUILayout.EndVertical();
             }
+
             GUILayout.Space(5);
             if (m_MethodInfo == null)
             {
                 UpdateDictionary();
             }
+
             DrawDictionary(m_Setting.debugData);
-            if(!GUI.changed) return;
+            if (!GUI.changed) return;
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(target);
         }
+
         private void DrawEnableForBuild()
         {
-            var scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';').ToList();
+            var scriptingDefineSymbols = PlayerSettings
+                .GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';')
+                .ToList();
             var enableForBuild = scriptingDefineSymbols.Contains("DEVELOPER_DEBUG");
             var storeEnableValue = enableForBuild;
             enableForBuild = EditorGUILayout.ToggleLeft("Enable For Build", enableForBuild);
@@ -65,11 +79,14 @@ namespace DeveloperDebug.Editor
             if (enableForBuild)
             {
                 scriptingDefineSymbols.Add("DEVELOPER_DEBUG");
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,scriptingDefineSymbols.ToArray());
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,
+                    scriptingDefineSymbols.ToArray());
                 return;
             }
+
             scriptingDefineSymbols.Remove("DEVELOPER_DEBUG");
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,scriptingDefineSymbols.ToArray());
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,
+                scriptingDefineSymbols.ToArray());
         }
 
         private void DrawDictionary(List<DeveloperDebugSettingData> funcData)
@@ -86,20 +103,22 @@ namespace DeveloperDebug.Editor
                     m_DisableList.Add(i);
                     continue;
                 }
-            
+
                 if (developerDebugFunc.editorOnly)
                 {
                     m_EditorOnlyList.Add(i);
                     continue;
                 }
+
                 m_EnableList.Add(i);
             }
-            
+
             var count = m_EnableList.Count;
             if (GUILayout.Button($"Enable ({count})", GUICustomStyle.StandardButtonStyle))
             {
                 m_Setting.showEnableList = !m_Setting.showEnableList;
             }
+
             EditorGUILayout.Space(10);
             if (m_Setting.showEnableList)
             {
@@ -114,6 +133,7 @@ namespace DeveloperDebug.Editor
             {
                 m_Setting.showEditorOnlyList = !m_Setting.showEditorOnlyList;
             }
+
             EditorGUILayout.Space(10);
             if (m_Setting.showEditorOnlyList)
             {
@@ -128,6 +148,7 @@ namespace DeveloperDebug.Editor
             {
                 m_Setting.showDisableList = !m_Setting.showDisableList;
             }
+
             EditorGUILayout.Space(10);
             if (m_Setting.showDisableList)
             {
@@ -141,36 +162,39 @@ namespace DeveloperDebug.Editor
         private void DrawData(DeveloperDebugSettingData data)
         {
             EditorGUILayout.BeginVertical(GUICustomStyle.BorderAreaStyle);
-            EditorGUILayout.LabelField(data.functionName,GUICustomStyle.CenteredBigLabel);
+            EditorGUILayout.LabelField(data.functionName, GUICustomStyle.CenteredBigLabel);
             EditorGUILayout.Space(8);
             EditorGUILayout.BeginHorizontal();
-            data.enable = EditorGUILayout.ToggleLeft("Enable", data.enable,GUICustomStyle.MiddleLeftBoldMiniLabel, GUILayout.MaxWidth(80));
+            data.enable = EditorGUILayout.ToggleLeft("Enable", data.enable, GUICustomStyle.MiddleLeftBoldMiniLabel,
+                GUILayout.MaxWidth(80));
             GUI.enabled = data.enable;
-            data.editorOnly = EditorGUILayout.ToggleLeft("Editor Only", data.editorOnly, GUICustomStyle.MiddleLeftBoldMiniLabel,GUILayout.MaxWidth(80));
+            data.editorOnly = EditorGUILayout.ToggleLeft("Editor Only", data.editorOnly,
+                GUICustomStyle.MiddleLeftBoldMiniLabel, GUILayout.MaxWidth(80));
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(8);
-            EditorGUILayout.LabelField("KeyCode",GUICustomStyle.MiddleLeftBoldMiniLabel);
-            data.keyCode = EditorGUILayout.TextField(data.keyCode,GUICustomStyle.EditTextFieldStyle);
+            EditorGUILayout.LabelField("KeyCode", GUICustomStyle.MiddleLeftBoldMiniLabel);
+            data.keyCode = EditorGUILayout.TextField(data.keyCode, GUICustomStyle.EditTextFieldStyle);
             EditorGUILayout.Space(5);
-            EditorGUILayout.LabelField("TouchCode",GUICustomStyle.MiddleLeftBoldMiniLabel);
+            EditorGUILayout.LabelField("TouchCode", GUICustomStyle.MiddleLeftBoldMiniLabel);
             EditorGUILayout.BeginHorizontal();
             GUI.enabled = false;
-            
-            data.touchCode = EditorGUILayout.TextField(data.touchCode,GUICustomStyle.EditTextFieldStyle);
-            
+
+            data.touchCode = EditorGUILayout.TextField(data.touchCode, GUICustomStyle.EditTextFieldStyle);
+
             GUI.enabled = data.enable;
             if (GUILayout.Button("Edit", GUICustomStyle.EditButtonStyle))
             {
                 data.editTouchCode = !data.editTouchCode;
             }
+
             EditorGUILayout.EndHorizontal();
-            if(data.editTouchCode) DrawButtonTouch(data);
+            if (data.editTouchCode) DrawButtonTouch(data);
             GUI.enabled = true;
-            if (data.enable) CheckCorrect(data.keyCode, data.touchCode,m_Setting.debugData);
+            if (data.enable) CheckCorrect(data.keyCode, data.touchCode, m_Setting.debugData, m_Setting.minLengthKeyCode,m_Setting.minLengthTouchCode);
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space(10);
         }
-        
+
         private void OnEnable()
         {
             AssemblyReloadEvents.afterAssemblyReload += UpdateDictionary;
@@ -180,6 +204,7 @@ namespace DeveloperDebug.Editor
         {
             AssemblyReloadEvents.afterAssemblyReload -= UpdateDictionary;
         }
+
         private void UpdateDictionary()
         {
             m_MethodInfo = typeof(DeveloperData).GetMethods(BindingFlags.Static | BindingFlags.Public);
@@ -188,19 +213,20 @@ namespace DeveloperDebug.Editor
             var methodCount = m_MethodInfo.Length;
             for (var i = 0; i < methodCount; i++)
             {
-                var data = oldData.Find(item => string.Equals(item.functionName,m_MethodInfo[i].Name));
+                var data = oldData.Find(item => string.Equals(item.functionName, m_MethodInfo[i].Name));
                 if (data != null)
                 {
                     newData.Add(data);
                     continue;
                 }
+
                 newData.Add(new DeveloperDebugSettingData(m_MethodInfo[i].Name));
             }
-            
-            ((DeveloperDebugSetting)target).debugData = newData;
+
+            ((DeveloperDebugSetting) target).debugData = newData;
         }
 
-        public static void CheckCorrect(string keyCode, string touchCode,List<DeveloperDebugSettingData> data,int eventCount = 1)
+        public static void CheckCorrect(string keyCode, string touchCode, List<DeveloperDebugSettingData> data,int minLengthKeyCode,int minLengthTouchCode, int eventCount = 1)
         {
             var keyCodeLength = string.IsNullOrEmpty(keyCode) ? 0 : keyCode.Length;
             var touchCodeLenght = string.IsNullOrEmpty(touchCode) ? 0 : touchCode.Length;
@@ -211,25 +237,25 @@ namespace DeveloperDebug.Editor
                 return;
             }
 
-            if (keyCodeLength > 0 && keyCodeLength < 5)
+            if (keyCodeLength > 0 && keyCodeLength < minLengthKeyCode)
             {
                 GUILayout.Space(5);
-                EditorGUILayout.HelpBox("The key code is case sensitive and at least 5 characters", MessageType.Error);
-            }
-            
-            if (touchCodeLenght > 0 && touchCodeLenght < 4)
-            {
-                GUILayout.Space(5);
-                EditorGUILayout.HelpBox("The touch code is at least 4 characters", MessageType.Error);
+                EditorGUILayout.HelpBox($"The key code is case sensitive and at least {minLengthKeyCode} characters", MessageType.Error);
             }
 
-            if (keyCodeLength >= 5 && data.Count(item => item.enable && string.Equals(item.keyCode,keyCode)) > 1)
+            if (touchCodeLenght > 0 && touchCodeLenght < minLengthTouchCode)
+            {
+                GUILayout.Space(5);
+                EditorGUILayout.HelpBox($"The touch code is at least {minLengthTouchCode} characters", MessageType.Error);
+            }
+
+            if (keyCodeLength >= minLengthKeyCode && data.Count(item => item.enable && string.Equals(item.keyCode, keyCode)) > 1)
             {
                 GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This key code has been used", MessageType.Error);
             }
 
-            if (touchCodeLenght >= 4 && data.Count(item => item.enable && string.Equals(item.touchCode,touchCode)) > 1)
+            if (touchCodeLenght >= minLengthTouchCode && data.Count(item => item.enable && string.Equals(item.touchCode, touchCode)) > 1)
             {
                 GUILayout.Space(5);
                 EditorGUILayout.HelpBox("This touch code has been used", MessageType.Error);
@@ -245,22 +271,27 @@ namespace DeveloperDebug.Editor
             {
                 data.touchCode += '1';
             }
-            if(GUILayout.Button("2",GUICustomStyle.ArrowButtonStyle))
+
+            if (GUILayout.Button("2", GUICustomStyle.ArrowButtonStyle))
             {
                 data.touchCode += '2';
             }
-            if(GUILayout.Button("3",GUICustomStyle.ArrowButtonStyle))
+
+            if (GUILayout.Button("3", GUICustomStyle.ArrowButtonStyle))
             {
                 data.touchCode += '3';
             }
-            if(GUILayout.Button("4",GUICustomStyle.ArrowButtonStyle))
+
+            if (GUILayout.Button("4", GUICustomStyle.ArrowButtonStyle))
             {
                 data.touchCode += '4';
             }
-            if(GUILayout.Button("X",GUICustomStyle.ArrowButtonStyle))
+
+            if (GUILayout.Button("X", GUICustomStyle.ArrowButtonStyle))
             {
                 data.touchCode = string.Empty;
             }
+
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }

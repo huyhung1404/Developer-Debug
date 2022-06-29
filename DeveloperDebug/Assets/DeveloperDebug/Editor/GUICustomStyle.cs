@@ -43,17 +43,17 @@ namespace DeveloperDebug.Editor
                 fontSize = 13,
                 normal =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f, 0f, 0f, 0.85f),
                     background = null
                 },
-                hover = 
+                hover =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f, 0f, 0f, 0.75f),
                     background = null
                 },
-                focused = 
+                focused =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f, 0f, 0f, 0.85f),
                     background = null
                 }
             };
@@ -65,23 +65,23 @@ namespace DeveloperDebug.Editor
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 15,
                 fontStyle = FontStyle.Bold,
-                normal = 
+                normal =
                 {
                     textColor = _isDaskSkin ? Color.white : Color.black,
                     background = null
                 },
-                hover = 
+                hover =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f, 0f, 0f, 0.75f),
                     background = null
                 },
-                focused = 
+                focused =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f, 0f, 0f, 0.85f),
                     background = null
                 }
             };
-            
+
             EditButtonStyle = new GUIStyle(EditorGUIUtility.GetBuiltinSkin(EditorSkin.Scene).button)
             {
                 fixedWidth = 40,
@@ -89,19 +89,19 @@ namespace DeveloperDebug.Editor
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 15,
                 fontStyle = FontStyle.Bold,
-                normal = 
+                normal =
                 {
                     textColor = _isDaskSkin ? Color.white : Color.black,
                     background = null
                 },
-                hover = 
+                hover =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f, 0f, 0f, 0.75f),
                     background = null
                 },
-                focused = 
+                focused =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f, 0f, 0f, 0.85f),
                     background = null
                 }
             };
@@ -111,27 +111,27 @@ namespace DeveloperDebug.Editor
                 fixedHeight = 25,
                 fontSize = 15,
                 alignment = TextAnchor.MiddleLeft,
-                padding = new RectOffset(10,0,0,0),
-                normal = 
+                padding = new RectOffset(10, 0, 0, 0),
+                normal =
                 {
                     textColor = _isDaskSkin ? Color.white : Color.black,
                     background = null
                 },
-                hover = 
+                hover =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f,0f,0f,0.75f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.75f) : new Color(0f, 0f, 0f, 0.75f),
                     background = null
                 },
-                focused = 
+                focused =
                 {
-                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f,0f,0f,0.85f),
+                    textColor = _isDaskSkin ? new Color(1f, 1f, 1f, 0.85f) : new Color(0f, 0f, 0f, 0.85f),
                     background = null
                 },
             };
 
             BorderAreaStyle = new GUIStyle(EditorStyles.helpBox)
             {
-                padding = new RectOffset(8,8,8,8),
+                padding = new RectOffset(8, 8, 8, 8),
             };
         }
 

@@ -4,7 +4,6 @@ namespace DeveloperDebug.Core
     using UnityEngine;
     using System;
     using System.Collections.Generic;
-    using System.Text.RegularExpressions;
 
     public class DeveloperDebugTouchCode : MonoBehaviour
     {
@@ -15,6 +14,7 @@ namespace DeveloperDebug.Core
         private static int m_NumberOfTouchesRequiredToEnterDebugMode;
         private static float m_LongestTimeWaitingForNextTouchCheck;
         private static float m_LongestTimeHoldingTouch;
+        private static int m_MinValueTouchCode;
 
         private int m_LastTouchCount;
         private bool m_DebugMode;
@@ -32,6 +32,7 @@ namespace DeveloperDebug.Core
             m_NumberOfTouchesRequiredToEnterDebugMode = _setting.numberOfTouchesRequiredToEnterDebugMode;
             m_LongestTimeWaitingForNextTouchCheck = _setting.longestTimeWaitingForNextTouchCheck;
             m_LongestTimeHoldingTouch = _setting.longestTimeHoldingTouch;
+            m_MinValueTouchCode = (int) Math.Pow(10, _setting.minLengthTouchCode - 1);
             var _instance = new GameObject().AddComponent<DeveloperDebugTouchCode>();
             _instance.name = _instance.GetType().Name;
         }
@@ -114,13 +115,15 @@ namespace DeveloperDebug.Core
                 if (m_TempInput[i] <= m_TempInput[_max]) continue;
                 _max = i;
             }
+
             return _max + 1;
         }
-        
+
         private void EndCheckTouchCode()
         {
             m_DebugMode = false;
-            if(!m_TouchCodeData.ContainsKey(m_InputCode)) return;
+            if (m_InputCode < m_MinValueTouchCode) return;
+            if (!m_TouchCodeData.ContainsKey(m_InputCode)) return;
             m_TouchCodeData[m_InputCode].Invoke();
         }
 
@@ -128,18 +131,26 @@ namespace DeveloperDebug.Core
 
         #region Public Method
 
-        private static readonly Regex m_KeyRegex = new Regex(@"^[1234]*$");
-
         public static void Register(int key, Action action)
         {
-            if (!m_KeyRegex.IsMatch(key.ToString())) return;
-            if (m_TouchCodeData.ContainsKey(key)) return;
+            if (key < m_MinValueTouchCode)
+            {
+                Debug.LogError("Invalid length");
+                return;
+            }
+
+            if (m_TouchCodeData.ContainsKey(key))
+            {
+                Debug.LogError("Key already exists");
+                return;
+            }
             m_TouchCodeData.Add(key, action);
             m_Enable = m_TouchCodeData.Count > 0;
         }
 
         public static void Unregister(int key)
         {
+            if (key < m_MinValueTouchCode) return;
             if (!m_TouchCodeData.ContainsKey(key)) return;
             m_TouchCodeData.Remove(key);
             m_Enable = m_TouchCodeData.Count > 0;
