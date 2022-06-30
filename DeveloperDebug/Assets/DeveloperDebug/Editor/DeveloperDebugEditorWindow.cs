@@ -79,7 +79,7 @@ namespace DeveloperDebug.Editor
             {
                 var _residuals = _index % 3;
                 if (_residuals == 0) EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button(KeyCode.Key))
+                if (GUILayout.Button(KeyCode.Key,GUICustomStyle.StandardButtonStyle,GUILayout.MinWidth(180)))
                 {
                     KeyCode.Value.Invoke();
                     m_Window.Close();
