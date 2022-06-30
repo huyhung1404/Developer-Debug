@@ -1,9 +1,10 @@
-namespace DeveloperDebug.Core
+namespace DeveloperDebug
 {
     using System;
     using System.Text.RegularExpressions;
     using UnityEngine;
-    
+    using Core;
+
     public static class DeveloperDebugExtension
     {
         private static readonly Regex m_TouchCodeRegex = new Regex(@"^[1234]*$");
