@@ -1,17 +1,29 @@
 namespace DeveloperDebug.Core
 {
     using UnityEngine;
+    using System;
 
     public class DeveloperDebugParameter : MonoBehaviour
     {
         private string m_StringInput;
         private Rect m_PopupRect;
+        private int m_WindowWidth;
+        private int m_WindowHeight;
+        private Action<string> m_OnEnter;
+        private Action m_OnCancel;
+
+        public void SetUp(Action<string> onEnter,Action onCancel)
+        {
+            m_OnEnter = onEnter;
+            m_OnCancel = onCancel;
+        }
+        
         private void Start()
         {
-            var _windowWidth = 400;
-            var _windowHeight = 120;
-            m_PopupRect = new Rect((float)(Screen.width - _windowWidth) / 2, (float)(Screen.height - _windowHeight) / 2,
-                _windowWidth, _windowHeight);
+            var _isPortrait = Screen.width < Screen.height;
+            m_WindowWidth = (int) (Screen.width * (_isPortrait ? 0.75 : 0.45));
+            m_WindowHeight = (int) (Screen.height * (_isPortrait ? 0.12 : 0.2));
+            m_PopupRect = new Rect((float) (Screen.width - m_WindowWidth) / 2, Screen.height - m_WindowHeight, m_WindowWidth, m_WindowHeight);
         }
 
         private void OnGUI()
@@ -22,21 +34,25 @@ namespace DeveloperDebug.Core
         private void WindowFunc(int i)
         {
             GUILayout.Space(5);
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Input", GUILayout.MaxWidth(30));
-            m_StringInput = GUILayout.TextField(m_StringInput, GUILayout.MaxWidth(350),GUILayout.MaxHeight(50));
-            GUILayout.EndHorizontal();
+            m_StringInput = GUILayout.TextArea(m_StringInput, GUILayout.Height(0.4f * m_WindowHeight));
             GUILayout.Space(5);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Cancel",GUILayout.MaxWidth(120),GUILayout.MaxHeight(60)))
+            if (GUILayout.Button("Cancel", GUILayout.Width(0.35f * m_WindowWidth), GUILayout.Height(0.25f * m_WindowHeight)))
             {
-                
+                m_OnCancel?.Invoke();
+                Destroy(gameObject);
+                GUIUtility.ExitGUI();
             }
 
-            if (GUILayout.Button("Enter",GUILayout.MaxWidth(120),GUILayout.MaxHeight(60)))
+            GUILayout.Space(15);
+            if (GUILayout.Button("Enter", GUILayout.Width(0.35f * m_WindowWidth), GUILayout.Height(0.25f * m_WindowHeight)))
             {
+                m_OnEnter?.Invoke(m_StringInput);
+                Destroy(gameObject);
+                GUIUtility.ExitGUI();
             }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }

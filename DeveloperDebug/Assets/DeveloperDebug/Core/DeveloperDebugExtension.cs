@@ -66,5 +66,12 @@ namespace DeveloperDebug.Core
             DeveloperDebugTouchCode.Unregister(key);
 #endif
         }
+
+        public static void ShowDeveloperInputPopup(Action<string> onEnter = null,Action onCancel = null)
+        {
+            var _inputPopup = new GameObject().AddComponent<DeveloperDebugParameter>();
+            _inputPopup.name = _inputPopup.GetType().Name;
+            _inputPopup.SetUp(onEnter,onCancel);
+        }
     }
 }
