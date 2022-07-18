@@ -23,10 +23,11 @@ namespace DeveloperDebug.Editor
             GUILayout.Space(5);
             if (GUILayout.Button("Config", GUICustomStyle.StandardButtonStyle))
             {
-                m_Setting.showConfig = !m_Setting.showConfig;
+                var _showConfig = EditorPrefs.GetBool("SHOW_CONFIG",true);
+                EditorPrefs.SetBool("SHOW_CONFIG", !_showConfig);
             }
 
-            if (m_Setting.showConfig)
+            if (EditorPrefs.GetBool("SHOW_CONFIG",true))
             {
                 EditorGUILayout.BeginVertical(GUICustomStyle.BorderAreaStyle);
                 DrawEnableForBuild();
@@ -103,11 +104,12 @@ namespace DeveloperDebug.Editor
             var _count = m_EnableList.Count;
             if (GUILayout.Button($"Enable ({_count})", GUICustomStyle.StandardButtonStyle))
             {
-                m_Setting.showEnableList = !m_Setting.showEnableList;
+                var _showEnableList = EditorPrefs.GetBool("SHOW_ENABLE_LIST",true);
+                EditorPrefs.SetBool("SHOW_ENABLE_LIST", !_showEnableList);
             }
 
             EditorGUILayout.Space(5);
-            if (m_Setting.showEnableList)
+            if (EditorPrefs.GetBool("SHOW_ENABLE_LIST",true))
             {
                 for (var i = 0; i < _count; i++)
                 {
@@ -118,11 +120,12 @@ namespace DeveloperDebug.Editor
             _count = m_EditorOnlyList.Count;
             if (GUILayout.Button($"Editor Only ({_count})", GUICustomStyle.StandardButtonStyle))
             {
-                m_Setting.showEditorOnlyList = !m_Setting.showEditorOnlyList;
+                var _showEditorOnlyList = EditorPrefs.GetBool("SHOW_EDITOR_ONLY_LIST",true);
+                EditorPrefs.SetBool("SHOW_EDITOR_ONLY_LIST", !_showEditorOnlyList);
             }
 
             EditorGUILayout.Space(5);
-            if (m_Setting.showEditorOnlyList)
+            if (EditorPrefs.GetBool("SHOW_EDITOR_ONLY_LIST",true))
             {
                 for (var i = 0; i < _count; i++)
                 {
@@ -133,11 +136,12 @@ namespace DeveloperDebug.Editor
             _count = m_DisableList.Count;
             if (GUILayout.Button($"Disable ({_count})", GUICustomStyle.StandardButtonStyle))
             {
-                m_Setting.showDisableList = !m_Setting.showDisableList;
+                var _showDisableList = EditorPrefs.GetBool("SHOW_DISABLE_LIST",true);
+                EditorPrefs.SetBool("SHOW_DISABLE_LIST", !_showDisableList);
             }
 
             EditorGUILayout.Space(5);
-            if (m_Setting.showDisableList)
+            if (EditorPrefs.GetBool("SHOW_DISABLE_LIST",true))
             {
                 for (var i = 0; i < _count; i++)
                 {
@@ -292,6 +296,10 @@ namespace DeveloperDebug.Editor
                     "Are you sure you want to delete the data?", "Sure", "Cancel"))
                 {
                     m_Setting.ClearDataDeveloperDebugData();
+                    EditorPrefs.SetBool("SHOW_CONFIG",true);
+                    EditorPrefs.SetBool("SHOW_ENABLE_LIST",false);
+                    EditorPrefs.SetBool("SHOW_EDITOR_ONLY_LIST",false);
+                    EditorPrefs.SetBool("SHOW_DISABLE_LIST",false);
                     UpdateDictionary();
                 }
 

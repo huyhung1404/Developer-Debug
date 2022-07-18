@@ -16,10 +16,6 @@ namespace DeveloperDebug.Core
         public int minLengthTouchCode = 4;
         public bool useDefaultTouchCodeForKeyCode;
         public List<DeveloperDebugSettingData> debugData;
-        public bool showConfig = true;
-        public bool showEnableList = true;
-        public bool showEditorOnlyList = true;
-        public bool showDisableList = true;
 
 #if (DEVELOPER_DEBUG && !UNITY_ANDROID && !UNITY_IOS) || UNITY_EDITOR
         public Dictionary<string, Action> GetKeyCodeData()
@@ -96,10 +92,6 @@ namespace DeveloperDebug.Core
             minLengthTouchCode = 4;
             useDefaultTouchCodeForKeyCode = false;
             debugData.Clear();
-            showConfig = true;
-            showEnableList = false;
-            showEditorOnlyList = false;
-            showDisableList = false;
         }
     }
 
