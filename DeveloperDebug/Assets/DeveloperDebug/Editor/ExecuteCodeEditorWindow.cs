@@ -31,6 +31,11 @@ namespace DeveloperDebug.Editor
             m_CodeExecute = new StringBuilder();
         }
 
+        private void OnValidate()
+        {
+            Init();
+        }
+
         [Obsolete("Obsolete")]
         private void OnGUI()
         {
