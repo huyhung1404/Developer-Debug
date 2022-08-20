@@ -15,7 +15,7 @@ namespace DeveloperDebug.Editor
         private DeveloperDebugSetting m_Setting;
         private Dictionary<string, Action> m_KeyCodeData;
 
-        [MenuItem("Window/DeveloperDebug")]
+        [MenuItem("Window/Developer Debug %#/")]
         public static void OpenPopupWindow()
         {
             m_Window = GetWindow<DeveloperDebugEditorWindow>("Developer Debug");
