@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1c21202058fd3e46b61883a33737314, type: 3}
   m_Name: ExecuteCodeRuntimeSetting
   m_EditorClassIdentifier: 
-  ReferencedAssemblies: []
+  ReferencedAssembliesPath:
+  - E:\Unity\Editor\2020.3.30f1\Editor\Data\Managed\UnityEngine.dll
+  Namespace: using UnityEngine;
