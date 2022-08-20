@@ -1,7 +1,5 @@
 using System;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using DeveloperDebug.Core;
 using Microsoft.CSharp;
@@ -17,6 +15,7 @@ namespace DeveloperDebug.Editor
         private ExecuteCodeRuntimeData m_Data;
         private Vector2 m_ScrollPosLib;
         private Vector2 m_ScrollPosCode;
+        private StringBuilder m_CodeExecute;
 
         [MenuItem("Window/Developer Debug/Execute Code Runtime")]
         public static void OpenPopupWindow()
@@ -29,8 +28,10 @@ namespace DeveloperDebug.Editor
         {
             m_Data = Resources.Load<ExecuteCodeRuntimeData>("ExecuteCodeRuntimeSetting");
             m_SerializedObject = new SerializedObject(m_Data);
+            m_CodeExecute = new StringBuilder();
         }
 
+        [Obsolete("Obsolete")]
         private void OnGUI()
         {
             m_SerializedObject.Update();
@@ -38,9 +39,10 @@ namespace DeveloperDebug.Editor
             EditorGUILayout.PropertyField(m_SerializedObject.FindProperty("ReferencedAssembliesPath"));
 
             EditorGUILayout.LabelField("Namespace", GUICustomStyle.CenteredBigLabel);
-            
-            m_ScrollPosLib = EditorGUILayout.BeginScrollView(m_ScrollPosLib,GUILayout.Height(50));
-            var Lib = GUILayout.TextArea(m_SerializedObject.FindProperty("Namespace").stringValue,GUILayout.ExpandHeight(true));
+
+            m_ScrollPosLib = EditorGUILayout.BeginScrollView(m_ScrollPosLib, GUILayout.Height(50));
+            var Lib = GUILayout.TextArea(m_SerializedObject.FindProperty("Namespace").stringValue,
+                GUILayout.ExpandHeight(true));
             m_Data.Namespace = Lib;
             EditorGUILayout.EndScrollView();
 
@@ -48,61 +50,53 @@ namespace DeveloperDebug.Editor
 
             EditorGUILayout.LabelField("Code", GUICustomStyle.CenteredBigLabel);
 
-            m_ScrollPosCode = EditorGUILayout.BeginScrollView(m_ScrollPosCode,GUILayout.ExpandHeight(true));
-            var code = GUILayout.TextArea(EditorPrefs.GetString("cache_code_runtime_debug", string.Empty),GUILayout.ExpandHeight(true));
-            EditorPrefs.SetString("cache_code_runtime_debug",code);
+            m_ScrollPosCode = EditorGUILayout.BeginScrollView(m_ScrollPosCode, GUILayout.ExpandHeight(true));
+            var code = GUILayout.TextArea(EditorPrefs.GetString("cache_code_runtime_debug", string.Empty),
+                GUILayout.ExpandHeight(true));
+            EditorPrefs.SetString("cache_code_runtime_debug", code);
             EditorGUILayout.EndScrollView();
             if (GUILayout.Button("Execute"))
             {
                 Execute(code);
             }
         }
-        
+
         [Obsolete("Obsolete")]
         private void Execute(string stringCode)
         {
-            // CSharpCodeProvider c = new CSharpCodeProvider();
-            // ICodeCompiler icc = c.CreateCompiler();
-            // CompilerParameters cp = new CompilerParameters();
-            //
-            // foreach (var referencedAssemblies in ((ExecuteCodeRuntimeData)m_Setting.targetObject).ReferencedAssembliesPath)
-            // {
-            //     cp.ReferencedAssemblies.Add(referencedAssemblies);
-            // }
-            //
-            // cp.CompilerOptions = "/t:library";
-            // cp.GenerateInMemory = true;
-            //
-            // StringBuilder sb = new StringBuilder("");
-            // sb.Append("using System;\n" );
-            // sb.Append("using UnityEngine;\n" );
-            //
-            // sb.Append("namespace CSCodeEvaler{ \n");
-            // sb.Append("public class CSCodeEvaler{ \n");
-            // sb.Append("public object EvalCode(){\n");
-            // sb.Append(sCSCode+"; \n");
-            // sb.Append("return null; \n");
-            // sb.Append("} \n");
-            // sb.Append("} \n");
-            // sb.Append("}\n");
-            //
-            // CompilerResults cr = icc.CompileAssemblyFromSource(cp, sb.ToString());
-            // if( cr.Errors.Count > 0 ){
-            //     foreach (CompilerError CompErr in cr.Errors)
-            //     {
-            //         Debug.LogError($"Line number {CompErr.Line}, Error Number: {CompErr.ErrorNumber}, '{CompErr.ErrorText}'");
-            //     }
-            //     return null;
-            // }
-            //
-            // System.Reflection.Assembly a = cr.CompiledAssembly;
-            // object o = a.CreateInstance("CSCodeEvaler.CSCodeEvaler");
-            //
-            // Type t = o.GetType();
-            // MethodInfo mi = t.GetMethod("EvalCode");
-            //
-            // object s = mi.Invoke(o, null);
-            // return s;
+            var cpCompilerParameters = new CompilerParameters();
+
+            foreach (var referencedAssemblies in m_Data.ReferencedAssembliesPath)
+            {
+                cpCompilerParameters.ReferencedAssemblies.Add(referencedAssemblies);
+            }
+
+            cpCompilerParameters.CompilerOptions = "/t:library";
+            cpCompilerParameters.GenerateInMemory = true;
+
+            m_CodeExecute.Clear();
+            m_CodeExecute.Append(m_Data.Namespace);
+            m_CodeExecute.Append(
+                "namespace DeveloperDebug.Editor{ public class ExecuteDebugCodeRuntime{ public void ExecuteFunc(){");
+            m_CodeExecute.Append(stringCode);
+            m_CodeExecute.Append("}}}");
+
+            var compilerResults = new CSharpCodeProvider().CreateCompiler()
+                .CompileAssemblyFromSource(cpCompilerParameters, m_CodeExecute.ToString());
+            if (compilerResults.Errors.Count > 0)
+            {
+                foreach (CompilerError CompErr in compilerResults.Errors)
+                {
+                    Debug.LogError(
+                        $"Line number {CompErr.Line}, Error Number: {CompErr.ErrorNumber}, '{CompErr.ErrorText}'");
+                }
+
+                return;
+            }
+
+            var instance =
+                compilerResults.CompiledAssembly.CreateInstance("DeveloperDebug.Editor.ExecuteDebugCodeRuntime");
+            instance?.GetType().GetMethod("ExecuteFunc")?.Invoke(instance, null);
         }
     }
 }
