@@ -18,8 +18,7 @@ namespace DeveloperDebug.Core
         private float m_WaitTimeKeyCode;
         private StringBuilder m_CurrentInputKeyCode;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Init()
+        public static void Initialization()
         {
             var _setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
             m_WaitingTimeForEachPress = _setting.waitingTimeForEachPress;

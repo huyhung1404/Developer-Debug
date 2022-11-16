@@ -24,8 +24,7 @@ namespace DeveloperDebug.Core
         private int m_InputCode;
         private bool m_WaitCheckingDebugMode;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Init()
+        public static void Initialization()
         {
             var _setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
             m_TouchCodeData = _setting.GetTouchCodeData();

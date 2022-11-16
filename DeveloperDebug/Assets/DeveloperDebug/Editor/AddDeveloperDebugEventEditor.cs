@@ -13,7 +13,7 @@ namespace DeveloperDebug.Editor
         {
             var _data = (AddDeveloperDebugEvent)target;
             serializedObject.Update();
-            if (ReferenceEquals(m_Setting,null)) m_Setting = Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
+            m_Setting ??= Resources.Load<DeveloperDebugSetting>("DeveloperDebugSetting");
             DrawData(_data.dataAdd, _data.enabled, _data.debugEvent.GetPersistentEventCount());
             if (!GUI.changed) return;
             serializedObject.ApplyModifiedProperties();
